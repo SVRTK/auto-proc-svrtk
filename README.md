@@ -24,7 +24,7 @@ The SVRTK package and all scripts are distributed under the terms of the
 Citation and acknowledgements
 -----------------------------
 
-In case you found SVRTK useful please give appropriate credit to the software ([SVRTK dockers](https://hub.docker.com/r/fetalsvrtk/)).
+In case you found auto brain SVRTK useful please give appropriate credit to the software ([SVRTK dockers](https://hub.docker.com/r/fetalsvrtk/svrtk)).
 
 > Uus, A. U., Hall, M., Payette, K., Hajnal, J. V., Deprez, M., Hutter, J., Rutherford, M. A., Story, L. (2023) Combined quantitative T2* map and structural T2- weighted tissue-specific analysis for fetal brain MRI: pilot automated pipeline. PIPPI MICCAI 2023 workshop (Accepted / in press)
 
