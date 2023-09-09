@@ -8,7 +8,7 @@ This repository contains the pipelines for automated fetal SVRTK reconstruction 
 
 - Integration via AIDE is led by Tom Roberts: https://github.com/SVRTK.
 
-- Integration via AIDE is led by Sara Neves Silva: https://github.com/SVRTK/gadgetron-svrtk-integration.
+- Integration via Gadgetron is led by Sara Neves Silva: https://github.com/SVRTK/gadgetron-svrtk-integration.
 
 
 Development of SVRTK was supported by projects led by Dr Maria Deprez, Prof Mary Rutherford, Dr Jana Hutter, Dr Lisa Story and Prof Jo Hajnal.
