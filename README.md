@@ -1,10 +1,14 @@
 Scripts for automated SVRTK reconstruction dockers 
 ====================
 
-This repository contains the pipelines for automated fetal SVRTK reconstruction [SVRTK dockers](https://hub.docker.com/r/fetalsvrtk/svrtk).
+This repository contains the pipelines for MONAI-based automated fetal MRI reconstruction [SVRTK dockers](https://hub.docker.com/r/fetalsvrtk/svrtk).
 
 
-- The repository and code for automation of SVR reconstruction were created by Alena Uus. 
+
+- The repository and code for automation of SVR reconstruction were designed and created by Alena Uus.
+
+
+See also:
 
 - Integration via AIDE is led by Tom Roberts: https://github.com/SVRTK.
 
