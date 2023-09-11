@@ -59,7 +59,7 @@ RUN git clone https://github.com/SVRTK/auto-proc-svrtk.git /home/auto-proc-svrtk
 RUN wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-atunet-brain_bet_all_degree_raw_stacks-1-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained-models/monai-checkpoints-atunet-brain_bet_all_degree_raw_stacks-1-lab \
     && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-global-loc-2-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained-models/monai-checkpoints-unet-global-loc-2-lab \
     && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-svr-brain-reo-5-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained-models/monai-checkpoints-unet-svr-brain-reo-5-lab \
-    && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab/best_metric_model.pth-P /home/auto-proc-svrtk/trained-models/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab
+    && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained-models/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab
 
 # Install Python packages
 RUN python -m pip install -r /home/auto-proc-svrtk/config/requirements.txt
