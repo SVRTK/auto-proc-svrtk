@@ -10,9 +10,9 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 
 The auto pipelines are used in:
 
-- Integration via AIDE led by Tom Roberts: https://github.com/SVRTK.
+- Integration via AIDE led by Tom Roberts: https://github.com/SVRTK/aide-svrtk
 
-- Integration via Gadgetron led by Sara Neves Silva: https://github.com/SVRTK/gadgetron-svrtk-integration.
+- Integration via Gadgetron led by Sara Neves Silva: https://github.com/SVRTK/gadgetron-svrtk-integration
 
 
 Development of SVRTK was supported by projects led by Dr Maria Deprez, Prof Mary Rutherford, Dr Jana Hutter, Dr Lisa Story and Prof Jo Hajnal.
