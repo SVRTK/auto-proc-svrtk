@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -l
+#!/bin/bash
 
 #
 # SVRTK : SVR reconstruction based on MIRTK
