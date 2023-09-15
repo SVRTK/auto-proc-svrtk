@@ -5,7 +5,7 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 
 
 
-- The repository and code for automation of SVR reconstruction were designed and created by Alena Uus.
+- The repository and code for automation of [SVR](https://github.com/SVRTK/SVRTK) reconstruction were designed and created by Alena Uus.
 
 
 The auto pipelines are used in:
