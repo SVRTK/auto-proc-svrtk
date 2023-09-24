@@ -21,8 +21,8 @@ Development of SVRTK was supported by projects led by Dr Maria Deprez, Prof Mary
 License
 -------
 
-The SVRTK package and all scripts are distributed under the terms of the
-[Apache License Version 2](http://www.apache.org/licenses/LICENSE-2.0). The license enables usage of SVRTK in both commercial and non-commercial applications, without restrictions on the licensing applied to the combined work.
+The auto SVRTK code and all scripts are distributed under the terms of the
+[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html). This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 
 Citation and acknowledgements
