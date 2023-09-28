@@ -108,7 +108,7 @@ echo
 if [ $# -ne 2 ] ; then
 
     if [ $# -ne 6 ] ; then
-        echo "Usage: bash /home/auto-proc-svrtk/auto-brain-reconstruction.sh"
+        echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-brain-reconstruction-aide.sh"
         echo "            [FULL path to the folder with raw T2w stacks in .nii or .dcm, e.g., /home/data/test]"
         echo "            [FULL path to the folder for recon results, e.g., /home/data/out-test]"
         echo "            (optional) [motion correction mode (0 or 1): 0 - minor, 1 - >180 degree rotations] - default: 1"
