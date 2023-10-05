@@ -9,7 +9,7 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 
 
 
-<img src="info/svrtk-auto-brain.jpg" alt="AUTOSVRTKEXAMPLE" height="200" align ="center" />
+<img src="info/svrtk-auto-brain.jpg" alt="AUTOSVRTKEXAMPLE" height="150" align ="center" />
 
 
 
