@@ -8,6 +8,11 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 - The repository and code for automation of [SVR](https://github.com/SVRTK/SVRTK) reconstruction were designed and created by [Alena Uus](https://github.com/alenauus).
 
 
+
+<img src="info/svrtk-auto-brain.jpg" alt="AUTOSVRTKEXAMPLE" height="200" align ="center" />
+
+
+
 The auto pipelines are used in:
 
 - Integration via AIDE led by Tom Roberts: https://github.com/SVRTK/aide-svrtk
