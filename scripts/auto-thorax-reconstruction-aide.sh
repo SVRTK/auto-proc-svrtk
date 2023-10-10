@@ -63,7 +63,7 @@ model_path=${segm_path}/trained_models
 
 
 
-test_dir=${software_path}/MIRTK
+test_dir=/bin/MIRTK
 if [ ! -d $test_dir ];then
     echo "ERROR: COULD NOT FIND MIRTK INSTALLED IN : " ${software_path}
     echo "PLEASE INSTALL OR UPDATE THE PATH software_path VARIABLE IN THE SCRIPT"
