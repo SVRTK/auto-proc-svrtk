@@ -52,9 +52,9 @@ default_run_dir=/home/tmp_proc
 
 segm_path=${software_path}/auto-proc-svrtk
 
-dcm2niix_path=${software_path}/dcm2niix/build/bin
+dcm2niix_path=/bin/dcm2niix/build/bin
 
-mirtk_path=${software_path}/MIRTK/build/bin
+mirtk_path=/bin/MIRTK/build/bin
 
 template_path=${segm_path}/templates
 
@@ -63,7 +63,7 @@ model_path=${segm_path}/trained_models
 
 
 
-test_dir=${software_path}/MIRTK
+test_dir=/bin/MIRTK
 if [ ! -d $test_dir ];then
     echo "ERROR: COULD NOT FIND MIRTK INSTALLED IN : " ${software_path}
     echo "PLEASE INSTALL OR UPDATE THE PATH software_path VARIABLE IN THE SCRIPT"
