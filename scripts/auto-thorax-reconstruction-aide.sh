@@ -347,7 +347,7 @@ mkdir monai-segmentation-results-global
 #current_monai_check_path=${model_path}/monai-checkpoints-unet-global-loc-055t-2-lab
 #current_monai_check_path=${model_path}/monai-checkpoints-global-pw
 
-python ${segm_path}/src/run_monai_unet_multi_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ stack-info.json ${main_dir}/monai-segmentation-results-global ${res} ${monai_lab_num}
+python3 ${segm_path}/src/run_monai_unet_multi_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ stack-info.json ${main_dir}/monai-segmentation-results-global ${res} ${monai_lab_num}
 
 
 
@@ -447,7 +447,7 @@ cd ${main_dir}
     # current_monai_check_path=/home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-notmasked-body-reo-4-lab
 
     mkdir monai-segmentation-results-stack-reo
-    python ${segm_path}/src/run_monai_unet_multi_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ reo-cropped-stack-info.json ${main_dir}/monai-segmentation-results-stack-reo ${res} ${monai_lab_num}
+    python3 ${segm_path}/src/run_monai_unet_multi_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ reo-cropped-stack-info.json ${main_dir}/monai-segmentation-results-stack-reo ${res} ${monai_lab_num}
     
     
     number_of_stacks=$(find monai-segmentation-results-stack-reo/ -name "*.nii*" | wc -l)
@@ -692,7 +692,7 @@ if [ $recon_roi = "body" ]; then
 
     
     mkdir monai-segmentation-results-svr-reo
-    python ${segm_path}/src/run_monai_unet_multi_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ reo-svr-info.json ${main_dir}/monai-segmentation-results-svr-reo ${res} ${monai_lab_num}
+    python3 ${segm_path}/src/run_monai_unet_multi_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ reo-svr-info.json ${main_dir}/monai-segmentation-results-svr-reo ${res} ${monai_lab_num}
     
     
     number_of_stacks=$(find monai-segmentation-results-svr-reo/ -name "*.nii*" | wc -l)
