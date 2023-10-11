@@ -1,5 +1,24 @@
 FROM ubuntu:20.04
 
+#
+# Auto SVRTK : deep learning automation for SVRTK reconstruction for fetal MRI
+#
+# Copyright 2018- King's College London
+#
+# The auto SVRTK code and all scripts are distributed under the terms of the
+# [GNU General Public License v3.0: 
+# https://www.gnu.org/licenses/gpl-3.0.en.html. 
+# 
+# This program is free software: you can redistribute it and/or modify 
+# it under the terms of the GNU General Public License as published by 
+# the Free Software Foundation version 3 of the License. 
+# 
+# This software is distributed in the hope that it will be useful, 
+# but WITHOUT ANY WARRANTY; without even the implied warranty of 
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+# See the GNU General Public License for more details.
+#
+
 # Add dcm2niix to MAP
 WORKDIR /bin
 
