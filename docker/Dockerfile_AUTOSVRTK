@@ -1,0 +1,109 @@
+FROM ubuntu:20.04
+
+# Add dcm2niix to MAP
+WORKDIR /bin
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y \
+	git build-essential cmake pigz python python3
+
+
+# ARG DEBIAN_FRONTEND=interactive
+
+
+RUN git config --global http.sslverify false
+
+RUN git clone https://github.com/rordenlab/dcm2niix.git --branch master --single-branch \
+	&& cd dcm2niix \
+	&& mkdir build && cd build \
+	&& cmake .. \
+	&& make
+
+ENV PATH="$PATH:/bin/dcm2niix/build/bin"
+
+WORKDIR /var/monai
+
+
+# Add SVRTK to MAP
+
+WORKDIR /bin
+
+# Install general libraries
+RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y \
+	git wget curl unzip
+
+# Install libraries required by MIRTK and SVRTK
+RUN apt-get install -y \
+	build-essential \
+	cmake \
+	cmake-curses-gui \
+	libboost-all-dev \
+	libeigen3-dev \
+	libtbb-dev \
+	libfltk1.3-dev
+
+# Install MIRTK/SVRTK
+RUN git clone https://github.com/SVRTK/MIRTK.git \
+    && mkdir -p /bin/MIRTK/Packages/SVRTK
+RUN git clone https://github.com/SVRTK/SVRTK.git /bin/MIRTK/Packages/SVRTK \
+    && mkdir -p /bin/MIRTK/build \
+	&& cd /bin/MIRTK/build \
+	&& cmake -D WITH_TBB="ON" -D MODULE_SVRTK="ON" .. \
+	&& make -j
+
+ENV PATH="$PATH:/bin/MIRTK/build/bin:/bin/MIRTK/build/lib/tools"
+
+WORKDIR /var/monai
+
+
+# Add MONAI 3D UNet model weights & execution script
+
+WORKDIR /home
+
+# Setup 3D UNet models
+RUN git clone https://github.com/SVRTK/auto-proc-svrtk.git /home/auto-proc-svrtk
+
+
+RUN apt-get install --no-install-recommends --no-install-suggests -y ca-certificates python3-pip
+
+RUN wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-atunet-brain_bet_all_degree_raw_stacks-1-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-atunet-brain_bet_all_degree_raw_stacks-1-lab \
+    && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-global-loc-2-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-global-loc-2-lab \
+    && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-svr-brain-reo-5-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-svr-brain-reo-5-lab \
+    && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab \
+    && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-stack-body-reo-4-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-stack-body-reo-4-lab \
+    && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-thorax-reo-4-lab-cmr/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-thorax-reo-4-lab-cmr 
+
+
+
+RUN apt install python3-pip
+RUN pip3 list
+RUN pip3 install virtualenv
+
+
+RUN python3 -m pip  install numpy
+
+RUN apt install --no-install-recommends --no-install-suggests -y libeccodes-dev libncurses5-dev python3.8-venv
+
+# Install Python packages
+RUN python3 -m pip install -r /home/auto-proc-svrtk/config/requirements.txt
+
+# Bugfix: without below, cannot import torch within Python
+# Error: OSError: /opt/hpcx/ompi/lib/libmpi.so.40: undefined symbol: opal_hwloc201_hwloc_get_type_depth
+# Fix: https://forums.developer.nvidia.com/t/issues-building-docker-image-from-ngc-container-nvcr-io-nvidia-pytorch-22-py3/209034/5
+ENV PATH="${PATH}:/opt/hpcx/ompi/bin"
+ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/hpcx/ompi/lib"
+
+
+
+RUN chmod +x /home/auto-proc-svrtk/scripts/*
+
+
+WORKDIR /home 
+
+
+ENV PATH="$PATH:/bin:/usr/bin:/sbin:/usr/sbin"
+
+ENTRYPOINT [ "" ]
+
+
