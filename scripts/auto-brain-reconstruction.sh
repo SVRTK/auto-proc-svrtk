@@ -27,13 +27,13 @@ echo
 echo "Setting environment ... "
 echo
 
-source /root/.bashrc
+source ~/.bashrc
 
-eval "$(conda shell.bash hook)"
-
-conda init bash
-
-conda activate FetalMRI_MONAI
+#eval "$(conda shell.bash hook)"
+#
+#conda init bash
+#
+#conda activate FetalMRI_MONAI
 
 #
 #echo "NOTE: UPDATE SOFTWARE PAHTS AS REQUIRED BEFORE RUNNING "

@@ -27,14 +27,14 @@ echo
 echo "Setting environment ... "
 echo
 
-source /root/.bashrc
+source ~/.bashrc
 
-eval "$(conda shell.bash hook)"
-
-conda init bash
-
-conda activate Segmentation_FetalMRI_MONAI
-
+#eval "$(conda shell.bash hook)"
+#
+#conda init bash
+#
+#conda activate Segmentation_FetalMRI_MONAI
+#
 
 
 #NOTE: UPDATE AS REQUIRED BEFORE RUNNING !!!!
