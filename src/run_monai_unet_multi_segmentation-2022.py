@@ -17,7 +17,7 @@ from monai.losses import DiceCELoss
 from monai.inferers import sliding_window_inference
 from monai.transforms import (
     AsDiscrete,
-    AddChanneld,
+#    AddChanneld,
     Compose,
     CropForegroundd,
     LoadImaged,
@@ -85,7 +85,7 @@ os.chdir(root_dir)
 run_transforms = Compose(
     [
         LoadImaged(keys=["image"]),
-        AddChanneld(keys=["image"]),
+#        AddChanneld(keys=["image"]),
         ScaleIntensityd(
             keys=["image"], minv=0.0, maxv=1.0
         ),
@@ -147,14 +147,14 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=1e-5)
 model.load_state_dict(torch.load(os.path.join(check_path, "best_metric_model.pth"), map_location=torch.device('cpu')), strict=False)
 model.to(device)
 
-#model.eval()
+model.eval()
 
 for x in range(len(run_datalist)):
   # print(x)
 
   case_num = x
   img_name = run_datalist[case_num]["image"]
-  case_name = os.path.split(run_ds[case_num]["image_meta_dict"]["filename_or_obj"])[1]
+  case_name = os.path.split(img_name)[1]
   out_name = results_path + "/cnn-lab-" + case_name
 
   print(case_num, out_name)
@@ -162,9 +162,9 @@ for x in range(len(run_datalist)):
   img_tmp_info = nib.load(img_name)
 
   with torch.no_grad():
-      img_name = os.path.split(run_ds[case_num]["image_meta_dict"]["filename_or_obj"])[1]
+#      img_name = os.path.split(run_ds[case_num]["image_meta_dict"]["filename_or_obj"])[1]
       img = run_ds[case_num]["image"]
-      run_inputs = torch.unsqueeze(img, 1)
+      run_inputs = torch.unsqueeze(img.unsqueeze(0), 1)
 #      .cuda()
 
       run_outputs1 = sliding_window_inference(
@@ -180,11 +180,6 @@ for x in range(len(run_datalist)):
       out_label = torch.argmax(run_outputs, dim=1).detach().cpu()[0, :, :, :]
       out_lab_nii = nib.Nifti1Image(out_label, img_tmp_info.affine, img_tmp_info.header)
       nib.save(out_lab_nii, out_name)
-
-
-
-#############################################################################################################
-#############################################################################################################
 
 
 

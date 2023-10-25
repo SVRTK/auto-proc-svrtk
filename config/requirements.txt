@@ -21,7 +21,7 @@ future
 humanize
 kiwisolver
 matplotlib
-monai==0.9.0
+monai
 nibabel
 packaging
 pandas
