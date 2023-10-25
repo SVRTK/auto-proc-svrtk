@@ -16,13 +16,13 @@ wheel
 zstd
 click
 cycler
-einops==0.4.1
+einops
 future
 humanize
 kiwisolver
 matplotlib
 monai==0.9.0
-nibabel=4.0.1
+nibabel
 packaging
 pandas
 pillow
@@ -32,8 +32,8 @@ python-deprecated
 pytz
 scipy
 simpleitk
-torchvision==0.13.1 # TAR
-pytorch-ignite==0.4.2
+torchvision # TAR
+pytorch-ignite
 tqdm
 pycocotools
 pydicom
