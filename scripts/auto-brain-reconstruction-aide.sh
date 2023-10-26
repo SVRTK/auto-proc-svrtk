@@ -818,7 +818,7 @@ if [ $recon_roi = "brain" ]; then
     ${mirtk_path}/mirtk threshold-image reo-SVR-output-${recon_roi}.nii.gz tmp-m.nii.gz 0.01
     ${mirtk_path}/mirtk crop-image reo-SVR-output-${recon_roi}.nii.gz tmp-m.nii.gz reo-SVR-output-${recon_roi}.nii.gz
     ${mirtk_path}/mirtk nan reo-SVR-output-${recon_roi}.nii.gz 100000
-
+    ${mirtk_path}/mirtk convert-image reo-SVR-output-${recon_roi}.nii.gz reo-SVR-output-${recon_roi}.nii.gz -rescale 0 5000 -short
 
     test_file=reo-SVR-output-${recon_roi}.nii.gz
     if [ ! -f ${test_file} ];then
@@ -833,11 +833,11 @@ if [ $recon_roi = "brain" ]; then
         exit
     fi
     
-    number_of_final_recons=$(ls *SVR-output*.nii* | wc -l)
+    number_of_final_recons=$(ls reo-SVR-output-* | wc -l)
     if [ ${number_of_final_recons} -ne 0 ];then
 
-        cp -r *SVR-output*nii* ${output_main_folder}/
-        cp -r average_mask_cnn.nii.gz ${output_main_folder}/
+        cp -r reo-SVR-output-${recon_roi}.nii.gz ${output_main_folder}/
+#        cp -r average_mask_cnn.nii.gz ${output_main_folder}/
 
         chmod 1777 -R ${output_main_folder}/
 

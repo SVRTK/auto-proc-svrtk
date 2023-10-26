@@ -753,10 +753,10 @@ if [ $recon_roi = "body" ]; then
     fi
     
 
-    number_of_final_recons=$(ls *SVR-output*.nii* | wc -l)
+    number_of_final_recons=$(ls reo-DSVR-output-* | wc -l)
     if [ ${number_of_final_recons} -ne 0 ];then
 
-        cp -r *SVR-output*nii* ${output_main_folder}/
+        cp -r reo-DSVR-output-${recon_roi_out}.nii.gz ${output_main_folder}/
 #        cp -r average_mask_cnn.nii.gz ${output_main_folder}/
 
         echo "-----------------------------------------------------------------------------"
