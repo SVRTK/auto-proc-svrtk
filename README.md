@@ -20,6 +20,19 @@ The auto pipelines are used in:
 - Integration via Gadgetron led by Sara Neves Silva: https://github.com/SVRTK/gadgetron-svrtk-integration
 
 
+**The automated SVRTK docker tag is _fetalsvrtk/svrtk:general_auto_amd_:**
+
+```bash
+
+docker pull fetalsvrtk/svrtk:auto-3.00
+
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-thorax-reconstruction.sh /home/data/folder-with-files /home/data/out-thorax-recon-results 1 3.0 0.8 1; chmod 1777 -R /home/data/out-thorax-recon-results ; '
+
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-reconstruction.sh /home/data/folder-with-files /home/data/out-brain-recon-results 1 3.0 0.8 1; chmod 1777 -R /home/data/out-brain-recon-results ; ' 
+
+```
+
+
 Development of SVRTK was supported by projects led by Dr Maria Deprez, Prof Mary Rutherford, Dr Jana Hutter, Dr Lisa Story and Prof Jo Hajnal.
 
 
@@ -37,8 +50,12 @@ Citation and acknowledgements
 
 In case you found auto SVRTK useful please give appropriate credit to the software and [SVRTK dockers](https://hub.docker.com/r/fetalsvrtk/svrtk).
 
-> Uus, A. U., Hall, M., Payette, K., Hajnal, J. V., Deprez, M., Hutter, J., Rutherford, M. A., Story, L. (2023) Combined quantitative T2* map and structural T2- weighted tissue-specific analysis for fetal brain MRI: pilot automated pipeline. PIPPI MICCAI 2023 workshop, LNCS 14246 (Accepted / in press)
+**Auto brain reconstruction (please include both citations):**
+> Uus, A. U., Hall, M., Payette, K., Hajnal, J. V., Deprez, M., Hutter, J., Rutherford, M. A., Story, L. (2023) Combined quantitative T2* map and structural T2- weighted tissue-specific analysis for fetal brain MRI: pilot automated pipeline. PIPPI MICCAI 2023 workshop, LNCS 14246.: https://doi.org/10.1007/978-3-031-45544-5_3
 
+> Kuklisova-Murgasova, M., Quaghebeur, G., Rutherford, M. A., Hajnal, J. V., & Schnabel, J. A. (2012). Reconstruction of fetal brain MRI with intensity matching and complete outlier removal. Medical Image Analysis, 16(8), 1550–1564.: https://doi.org/10.1016/j.media.2012.07.004
+
+**Auto thorax/body reconstruction:**
 > Uus, A., Grigorescu, I., van Poppel, M., Steinweg, J. K., Roberts, T., Rutherford, M., Hajnal, J., Lloyd, D., Pushparajah, K. & Deprez, M. (2022) Automated 3D reconstruction of the fetal thorax in the standard atlas space from motion-corrupted MRI stacks for 21-36 weeks GA range. Medical Image Analysis, 80 (August 2022).: https://doi.org/10.1016/j.media.2022.102484
 
 
