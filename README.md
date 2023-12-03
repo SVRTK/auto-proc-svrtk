@@ -24,7 +24,7 @@ The auto pipelines are used in:
 
 ```bash
 
-docker pull fetalsvrtk/svrtk:auto-3.00
+docker pull fetalsvrtk/svrtk:general_auto_amd
 
 docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-thorax-reconstruction.sh /home/data/folder-with-files /home/data/out-thorax-recon-results 1 3.0 0.8 1; chmod 1777 -R /home/data/out-thorax-recon-results ; '
 
