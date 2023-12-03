@@ -33,7 +33,7 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 ```
 
 
-Development of SVRTK was supported by projects led by Dr Maria Deprez, Prof Mary Rutherford, Dr Jana Hutter, Dr Lisa Story and Prof Jo Hajnal.
+Development of SVRTK was supported by projects led by Prof Mary Rutherford, Dr Maria Deprez, Dr Jana Hutter, Dr Lisa Story and Prof Jo Hajnal.
 
 
 License
