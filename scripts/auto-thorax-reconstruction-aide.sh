@@ -168,6 +168,8 @@ cd ${default_run_dir}
 main_dir=$(pwd)
 
 
+cp -r ${input_main_folder} ${default_run_dir}/input-files
+input_main_folder=${default_run_dir}/input-files
 
 number_of_stacks=$(find ${input_main_folder}/ -name "*.dcm" | wc -l)
 if [ $number_of_stacks -gt 0 ];then
