@@ -1,23 +1,24 @@
 #!/usr/bin/env bash -l
 
 #
-# SVRTK : SVR reconstruction based on MIRTK
+# Auto SVRTK : deep learning automation for SVRTK reconstruction for fetal MRI
 #
 # Copyright 2018- King's College London
 #
 # The auto SVRTK code and all scripts are distributed under the terms of the
-# [GNU General Public License v3.0:
-# https://www.gnu.org/licenses/gpl-3.0.en.html.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation version 3 of the License.
-#
-# This software is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# [GNU General Public License v3.0: 
+# https://www.gnu.org/licenses/gpl-3.0.en.html. 
+# 
+# This program is free software: you can redistribute it and/or modify 
+# it under the terms of the GNU General Public License as published by 
+# the Free Software Foundation version 3 of the License. 
+# 
+# This software is distributed in the hope that it will be useful, 
+# but WITHOUT ANY WARRANTY; without even the implied warranty of 
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
 # See the GNU General Public License for more details.
 #
+
  
 echo
 echo "-----------------------------------------------------------------------------"
@@ -110,7 +111,7 @@ echo
 if [ $# -ne 2 ] ; then
 
     if [ $# -ne 6 ] ; then
-        echo "Usage: bash /home/auto-proc-svrtk/auto-thorax-reconstruction.sh"
+        echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-thorax-reconstruction.sh"
         echo "            [FULL path to the folder with raw T2w stacks in .nii or .dcm, e.g., /home/data/test]"
         echo "            [FULL path to the folder for recon results, e.g., /home/data/out-test]"
         echo "            (optional) [motion correction mode (0 or 1): 0 - minor, 1 - >180 degree rotations] - default: 1"
@@ -167,8 +168,10 @@ fi
 cd ${default_run_dir}
 main_dir=$(pwd)
 
+
 cp -r ${input_main_folder} ${default_run_dir}/input-files
 input_main_folder=${default_run_dir}/input-files
+
 
 number_of_stacks=$(find ${input_main_folder}/ -name "*.dcm" | wc -l)
 if [ $number_of_stacks -gt 0 ];then
@@ -341,7 +344,7 @@ number_of_stacks=$(find tmp-res-global/ -name "*.nii*" | wc -l)
 ${mirtk_path}/mirtk prepare-for-monai res-global-files/ global-files/ stack-info.json stack-info.csv ${res} ${number_of_stacks} tmp-res-global/*nii* > tmp.log
 
 
- current_monai_check_path=${model_path}/monai-checkpoints-unet-global-loc-2-lab
+current_monai_check_path=${model_path}/monai-checkpoints-unet-global-loc-2-lab
 
 mkdir monai-segmentation-results-global
  
@@ -733,7 +736,7 @@ if [ $recon_roi = "body" ]; then
     ${mirtk_path}/mirtk resample-image ${thorax_reo_template}/thorax-ref.nii.gz ref.nii.gz -size ${recon_resolution} ${recon_resolution} ${recon_resolution} -interp BSpline
 
     ${mirtk_path}/mirtk transform-image DSVR-output-${recon_roi_out}.nii.gz reo-DSVR-output-${recon_roi_out}.nii.gz -target ref.nii.gz -dofin dof-to-atl-${recon_roi}.dof -interp BSpline
-    ${mirtk_path}/mirtk threshold-image reo-DSVR-output-${recon_roi_out}.nii.gz tmp-m.nii.gz 0.01
+    ${mirtk_path}/mirtk threshold-image reo-DSVR-output-${recon_roi_out}.nii.gz tmp-m.nii.gz 0.01 > tmp.txt 
     ${mirtk_path}/mirtk crop-image reo-DSVR-output-${recon_roi_out}.nii.gz tmp-m.nii.gz reo-DSVR-output-${recon_roi_out}.nii.gz
     ${mirtk_path}/mirtk nan reo-DSVR-output-${recon_roi_out}.nii.gz 100000
     ${mirtk_path}/mirtk convert-image reo-DSVR-output-${recon_roi_out}.nii.gz reo-DSVR-output-${recon_roi_out}.nii.gz -rescale 0 5000 -short
@@ -754,8 +757,8 @@ if [ $recon_roi = "body" ]; then
     fi
     
 
-    number_of_final_recons=$(ls reo-DSVR-output-* | wc -l)
-    if [ ${number_of_final_recons} -ne 0 ];then
+    test_file=reo-DSVR-output-${recon_roi_out}.nii.gz
+    if [ -f ${test_file} ];then
 
         cp -r reo-DSVR-output-${recon_roi_out}.nii.gz ${output_main_folder}/
 #        cp -r average_mask_cnn.nii.gz ${output_main_folder}/

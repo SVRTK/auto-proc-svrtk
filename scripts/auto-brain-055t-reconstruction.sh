@@ -29,14 +29,20 @@ echo
 
 source ~/.bashrc
 
-#eval "$(conda shell.bash hook)"
-#
-#conda init bash
-#
-#conda activate FetalMRI_MONAI
+# source /root/.bashrc
 
+# eval "$(conda shell.bash hook)"
+
+# conda init bash
+
+# conda activate Segmentation_FetalMRI_MONAI
+
+
+
+#NOTE: UPDATE AS REQUIRED BEFORE RUNNING !!!!
+#NOTE - BEFORE USING: UPLOAD https://gin.g-node.org/SVRTK/fetal_mri_network_weights
 #
-#echo "NOTE: UPDATE SOFTWARE PAHTS AS REQUIRED BEFORE RUNNING "
+#echo "NOTE: UPDATE SOFTWARE PAHTS AS REQUIRED BEFORE RUNNING !!!!"
 #echo "NOTE: DOWNLOAD MONAI WEIGHTS INTO auto-proc-svrtk/trained_models FOLDER FROM https://gin.g-node.org/SVRTK/fetal_mri_network_weights"
 #
 #exit
@@ -96,7 +102,7 @@ echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo
-echo "SVRTK for fetal MRI (KCL): auto brain SVR reconstruction for SSTSE / HASTE T2w fetal MRI"
+echo "SVRTK for fetal MRI (KCL): auto brain SVR reconstruction for 0.55T TSE T2w fetal MRI"
 echo "Source code: https://github.com/SVRTK/auto-proc-svrtk"
 echo
 echo "-----------------------------------------------------------------------------"
@@ -106,12 +112,12 @@ echo
 if [ $# -ne 2 ] ; then
 
     if [ $# -ne 6 ] ; then
-        echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-brain-reconstruction.sh"
+        echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-brain-055t-reconstruction.sh"
         echo "            [FULL path to the folder with raw T2w stacks in .nii or .dcm, e.g., /home/data/test]"
         echo "            [FULL path to the folder for recon results, e.g., /home/data/out-test]"
         echo "            (optional) [motion correction mode (0 or 1): 0 - minor, 1 - >180 degree rotations] - default: 1"
-        echo "            (optional) [slice thickness] - default: 3.0"
-        echo "            (optional) [output recon resolution] - default: 0.8"
+        echo "            (optional) [slice thickness] - default: 4.7"
+        echo "            (optional) [output recon resolution] - default: 1.2"
         echo "            (optional) [number of packages] - default: 1"
         echo
         exit
@@ -128,8 +134,8 @@ else
     input_main_folder=$1
     output_main_folder=$2
     motion_correction_mode=1
-    default_thickness=3.0
-    recon_resolution=0.8
+    default_thickness=4.7
+    recon_resolution=1.2
     num_packages=1
 fi
 
@@ -147,21 +153,22 @@ recon_roi=brain
 test_dir=${input_main_folder}
 if [ ! -d $test_dir ];then
     echo
-    echo "ERROR: NO FOLDER WITH THE INPUT FILES FOUND !!!!"
-    exit
+	echo "ERROR: NO FOLDER WITH THE INPUT FILES FOUND !!!!" 
+	exit
 fi
 
 
 test_dir=${output_main_folder}
 if [ ! -d $test_dir ];then
-    mkdir ${output_main_folder}
+	mkdir ${output_main_folder}
     chmod 1777 -R ${output_main_folder}/
-fi
+fi 
 
 
 
 cd ${default_run_dir}
 main_dir=$(pwd)
+
 
 
 cp -r ${input_main_folder} ${default_run_dir}/input-files
@@ -189,14 +196,14 @@ if [ $number_of_stacks -eq 0 ];then
 
     echo
     echo "-----------------------------------------------------------------------------"
-    echo "ERROR: NO INPUT .nii / .nii.gz FILES FOUND !!!!"
+	echo "ERROR: NO INPUT .nii / .nii.gz FILES FOUND !!!!"
     echo "-----------------------------------------------------------------------------"
     echo
-    exit
-fi
+	exit
+fi 
 
 mkdir ${default_run_dir}/org-files
-find ${input_main_folder}/ -name "*.nii*" -exec cp {} ${default_run_dir}/org-files  \;
+find ${input_main_folder}/ -name "*.nii*" -exec cp {} ${default_run_dir}/org-files  \; 
 
 
 number_of_stacks=$(find ${default_run_dir}/org-files -name "*SVR-output*.nii*" | wc -l)
@@ -339,7 +346,9 @@ monai_lab_num=2
 number_of_stacks=$(find tmp-res-global/ -name "*.nii*" | wc -l)
 ${mirtk_path}/mirtk prepare-for-monai res-global-files/ global-files/ stack-info.json stack-info.csv ${res} ${number_of_stacks} tmp-res-global/*nii* > tmp.log
 
-current_monai_check_path=${model_path}/monai-checkpoints-unet-global-loc-2-lab
+# current_monai_check_path=${model_path}/monai-checkpoints-unet-global-loc-2-lab
+
+current_monai_check_path=${model_path}/monai-checkpoints-unet-global-loc-2-lab-055t
 
 mkdir monai-segmentation-results-global
 python3 ${segm_path}/src/run_monai_unet_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ stack-info.json ${main_dir}/monai-segmentation-results-global ${res} ${monai_lab_num}
@@ -393,6 +402,16 @@ do
 #    ${mirtk_path}/mirtk extract-connected-components out-global-masks/mask-body-${jj}.nii.gz out-global-masks/mask-body-${jj}.nii.gz -n 1
     ${mirtk_path}/mirtk extract-connected-components out-global-masks/mask-brain-${jj}.nii.gz out-global-masks/mask-brain-${jj}.nii.gz -max-size 950000 -n 1
 
+#    roi=body
+#    ${mirtk_path}/mirtk dilate-image out-global-masks/mask-${roi}-${jj}.nii.gz out-global-masks/mask-${roi}-${jj}.nii.gz -iterations 2
+#    ${mirtk_path}/mirtk erode-image out-global-masks/mask-brain-${jj}.nii.gz out-global-masks/mask-${roi}-${jj}.nii.gz -iterations 2
+#    ${mirtk_path}/mirtk dilate-image out-global-masks/mask-${roi}-${jj}.nii.gz dl-m.nii.gz -iterations 7
+#    ${mirtk_path}/mirtk crop-image ${all_org_stacks[$i]} dl-m.nii.gz recon-stacks-${roi}/stack-${jj}.nii.gz
+#
+#    ${mirtk_path}/mirtk dilate-image out-global-masks/mask-${roi}-${jj}.nii.gz dl-m.nii.gz -iterations 2
+#    ${mirtk_path}/mirtk crop-image ${all_org_stacks[$i]} dl-m.nii.gz cropped-stacks-${roi}/stack-${jj}.nii.gz
+#    ${mirtk_path}/mirtk mask-image cropped-stacks-${roi}/stack-${jj}.nii.gz dl-m.nii.gz cropped-stacks-${roi}/stack-${jj}.nii.gz
+    
     roi=brain
 #    ${mirtk_path}/mirtk erode-image out-global-masks/mask-${roi}-${jj}.nii.gz out-global-masks/mask-${roi}-${jj}.nii.gz -iterations 2
 #    ${mirtk_path}/mirtk dilate-image out-global-masks/mask-brain-${jj}.nii.gz out-global-masks/mask-${roi}-${jj}.nii.gz -iterations 2
@@ -449,9 +468,9 @@ if [ ${number_of_stacks} -eq 0 ];then
     echo "-----------------------------------------------------------------------------"
     echo "ERROR: brain CNN LOCALISATION DID NOT WORK !!!!"
     echo "-----------------------------------------------------------------------------"
-    echo "note: check whether FetalMRI_MONAI was activated"
+    echo "note: check whether Segmentation_FetalMRI_MONAI was activated"
     echo "conda init bash"
-    echo "conda activate FetalMRI_MONAI"
+    echo "conda activate Segmentation_FetalMRI_MONAI"
     echo
     exit
 fi
@@ -516,9 +535,9 @@ if [ $motion_correction_mode -eq 1 ]; then
     monai_lab_num=5
     ${mirtk_path}/mirtk prepare-for-monai res-cropped-files/ again-cropped-files/ reo-cropped-stack-info.json reo-cropped-stack-info.csv ${res} ${number_of_stacks} masked-cropped-files-brain/*nii* > tmp.log
     
-    current_monai_check_path=${model_path}/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab
+    # current_monai_check_path=${model_path}/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab
 
-#    current_monai_check_path=${model_path}/monai-checkpoints-unet-brain-raw-reo-5-lab-055t
+    current_monai_check_path=${model_path}/monai-checkpoints-unet-brain-raw-reo-5-lab-055t
     
     mkdir monai-segmentation-results-stack-reo
     python3 ${segm_path}/src/run_monai_unet_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ reo-cropped-stack-info.json ${main_dir}/monai-segmentation-results-stack-reo ${res} ${monai_lab_num}
@@ -564,14 +583,18 @@ if [ $motion_correction_mode -eq 1 ]; then
         
         jj=$((${i}+1000))
 
+        # echo " ???? " 
+
+
+        # ${mirtk_path}/mirtk transform-image ${all_masks[$i]} ${all_masks[$i]} -target ${all_org_stacks[$i]} -labels 
         
         for ((q=1;q<6;q++));
         do
             ${mirtk_path}/mirtk extract-label ${all_masks[$i]} out-stack-reo-masks/mask-${jj}-${q}.nii.gz ${q} ${q}
-            ${mirtk_path}/mirtk dilate-image out-stack-reo-masks/mask-${jj}-${q}.nii.gz out-stack-reo-masks/mask-${jj}-${q}.nii.gz
+            ${mirtk_path}/mirtk dilate-image out-stack-reo-masks/mask-${jj}-${q}.nii.gz out-stack-reo-masks/mask-${jj}-${q}.nii.gz 
             ${mirtk_path}/mirtk erode-image out-stack-reo-masks/mask-${jj}-${q}.nii.gz out-stack-reo-masks/mask-${jj}-${q}.nii.gz
             ${mirtk_path}/mirtk extract-connected-components out-stack-reo-masks/mask-${jj}-${q}.nii.gz out-stack-reo-masks/mask-${jj}-${q}.nii.gz
-            # ${mirtk_path}/mirtk transform-image out-stack-reo-masks/mask-${jj}-${q}.nii.gz out-stack-reo-masks/mask-${jj}-${q}.nii.gz -target ${all_org_stacks[$i]} -labels
+            # ${mirtk_path}/mirtk transform-image out-stack-reo-masks/mask-${jj}-${q}.nii.gz out-stack-reo-masks/mask-${jj}-${q}.nii.gz -target ${all_org_stacks[$i]} -labels 
         done
 
 
@@ -595,7 +618,9 @@ if [ $motion_correction_mode -eq 1 ]; then
             exit
         fi
         
-        ${mirtk_path}/mirtk info out-dofs-to-templates/dof-to-atl-${jj}.dof
+        ${mirtk_path}/mirtk info out-dofs-to-templates/dof-to-atl-${jj}.dof 
+
+        # cp recon-stacks-brain/stack-${jj}.nii.gz  test-org/
     
         ${mirtk_path}/mirtk edit-image recon-stacks-brain/stack-${jj}.nii.gz recon-stacks-brain/stack-${jj}.nii.gz -dofin_i out-dofs-to-templates/dof-to-atl-${jj}.dof
         ${mirtk_path}/mirtk edit-image recon-masks-brain/mask-${jj}.nii.gz recon-masks-brain/mask-${jj}.nii.gz -dofin_i out-dofs-to-templates/dof-to-atl-${jj}.dof
@@ -639,13 +664,19 @@ if [ $recon_roi = "brain" ]; then
     
     
     mkdir proc-stacks-${recon_roi}
-
-    echo " ... "
-
-    mkdir proc-stacks-${recon_roi}
-        
-    ${mirtk_path}/mirtk stacks-and-masks-selection ${number_of_stacks} $(echo $stack_names) $(echo $mask_names) proc-stacks-${recon_roi} 15 1
     
+#    if [ $motion_correction_mode -eq 1 ]; then
+
+        echo " ... "
+
+        # /home/legacy/MIRTK/build/bin/mirtk 
+
+        mkdir proc-stacks-${recon_roi}
+        
+        ${mirtk_path}/mirtk stacks-and-masks-selection ${number_of_stacks} $(echo $stack_names) $(echo $mask_names) proc-stacks-${recon_roi} 15 1
+#    fi
+    
+#    > tmp.txt
     
     test_file=selected_template.nii.gz
     if [ ! -f ${test_file} ];then
@@ -684,19 +715,20 @@ if [ $recon_roi = "brain" ]; then
         
         ${mirtk_path}/mirtk average-images selected_template.nii.gz recon-stacks-${recon_roi_global}/*.nii* -target selected_template.nii.gz
         ${mirtk_path}/mirtk average-images average_mask_cnn.nii.gz recon-masks-${recon_roi}/*.nii* -target selected_template.nii.gz
+#        ${mirtk_path}/mirtk nan average_mask_cnn.nii.gz 0
         ${mirtk_path}/mirtk nan selected_template.nii.gz 1000000
         ${mirtk_path}/mirtk convert-image average_mask_cnn.nii.gz average_mask_cnn.nii.gz -short
     
-    else
+    else 
 
-        ${mirtk_path}/mirtk average-images selected_template.nii.gz proc-stacks-${recon_roi}/*nii*
-        ${mirtk_path}/mirtk resample-image selected_template.nii.gz ref.nii.gz -size 1 1 1
+        ${mirtk_path}/mirtk average-images selected_template.nii.gz proc-stacks-${recon_roi}/*nii* 
+	    ${mirtk_path}/mirtk resample-image selected_template.nii.gz ref.nii.gz -size 1 1 1
 
-        ${mirtk_path}/mirtk edit-image ref.nii.gz ref.nii.gz -dx 1.5 -dy 1.5 -dz 1.5
-        ${mirtk_path}/mirtk resample-image ref.nii.gz ref.nii.gz -size 1 1 1
+	    ${mirtk_path}/mirtk edit-image ref.nii.gz ref.nii.gz -dx 1.5 -dy 1.5 -dz 1.5 
+	    ${mirtk_path}/mirtk resample-image ref.nii.gz ref.nii.gz -size 1 1 1 
 
-        ${mirtk_path}/mirtk average-images selected_template.nii.gz proc-stacks-${recon_roi}/*nii* -target ref.nii.gz
-        ${mirtk_path}/mirtk transform-image average_mask_cnn.nii.gz average_mask_cnn.nii.gz -target ref.nii.gz -labels
+        ${mirtk_path}/mirtk average-images selected_template.nii.gz proc-stacks-${recon_roi}/*nii* -target ref.nii.gz  
+	    ${mirtk_path}/mirtk transform-image average_mask_cnn.nii.gz average_mask_cnn.nii.gz -target ref.nii.gz -labels 
 
     fi
      
@@ -758,6 +790,7 @@ if [ $recon_roi = "brain" ]; then
     
     ${mirtk_path}/mirtk dilate-image ../average_mask_cnn.nii.gz dl.nii.gz -iterations 2
     ${mirtk_path}/mirtk mask-image ../SVR-output-${recon_roi}.nii.gz dl.nii.gz  ../masked-SVR-output-${recon_roi}.nii.gz
+    ${mirtk_path}/mirtk crop-image ../masked-SVR-output-${recon_roi}.nii.gz dl.nii.gz  ../masked-SVR-output-${recon_roi}.nii.gz
     
     
     echo
@@ -833,11 +866,11 @@ if [ $recon_roi = "brain" ]; then
         exit
     fi
     
-    test_file=reo-SVR-output-${recon_roi}.nii.gz
-    if [ -f ${test_file} ];then
+    number_of_final_recons=$(ls *SVR-output*.nii* | wc -l)
+    if [ ${number_of_final_recons} -ne 0 ];then
 
         cp -r reo-SVR-output-${recon_roi}.nii.gz ${output_main_folder}/
-        # cp -r average_mask_cnn.nii.gz ${output_main_folder}/
+        #cp -r average_mask_cnn.nii.gz ${output_main_folder}/
 
         chmod 1777 -R ${output_main_folder}/
 
@@ -867,3 +900,8 @@ echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo
+
+
+
+
+
