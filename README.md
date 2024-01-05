@@ -11,6 +11,7 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 
 <img src="info/svrtk-auto-brain.jpg" alt="AUTOSVRTKEXAMPLE" height="150" align ="center" />
 
+<img src="info/svrtk-auto-body.jpg" alt="AUTOSVRTKEXAMPLE" height="150" align ="center" />
 
 
 The auto pipelines are used in:
@@ -20,15 +21,15 @@ The auto pipelines are used in:
 - Integration via Gadgetron led by Sara Neves Silva: https://github.com/SVRTK/gadgetron-svrtk-integration
 
 
-**The automated SVRTK docker tag is _fetalsvrtk/svrtk:general_auto_amd_:**
+**The automated SVRTK docker tag is _fetalsvrtk/svrtk:general_auto_amd_ :**
 
 ```bash
 
 docker pull fetalsvrtk/svrtk:general_auto_amd
 
-docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-thorax-reconstruction.sh /home/data/folder-with-files /home/data/out-thorax-recon-results 1 3.0 0.8 1; chmod 1777 -R /home/data/out-thorax-recon-results ; '
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-body-reconstruction.sh /home/data/folder-with-files /home/data/out-body-recon-results 1 3.0 0.8 1 ; '
 
-docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-reconstruction.sh /home/data/folder-with-files /home/data/out-brain-recon-results 1 3.0 0.8 1; chmod 1777 -R /home/data/out-brain-recon-results ; ' 
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-reconstruction.sh /home/data/folder-with-files /home/data/out-brain-recon-results 1 3.0 0.8 1 ; ' 
 
 ```
 
@@ -57,6 +58,12 @@ In case you found auto SVRTK useful please give appropriate credit to the softwa
 
 **Auto thorax/body reconstruction:**
 > Uus, A., Grigorescu, I., van Poppel, M., Steinweg, J. K., Roberts, T., Rutherford, M., Hajnal, J., Lloyd, D., Pushparajah, K. & Deprez, M. (2022) Automated 3D reconstruction of the fetal thorax in the standard atlas space from motion-corrupted MRI stacks for 21-36 weeks GA range. Medical Image Analysis, 80 (August 2022).: https://doi.org/10.1016/j.media.2022.102484
+
+**Brain tissue segmentation:**
+> Uus, A. U., Kyriakopoulou, V., Makropoulos, A., Fukami-Gartner, A., Cromb, D., Davidson, A., Cordero-Grande, L., Price, A. N., Grigorescu, I., Williams, L. Z. J., Robinson, E. C., Lloyd, D., Pushparajah, K., Story, L., Hutter, J., Counsell, S. J., Edwards, A. D., Rutherford, M. A., Hajnal, J. V., Deprez, M. (2023) BOUNTI: Brain vOlumetry and aUtomated parcellatioN for 3D feTal MRI. eLife 12:RP88818; doi: https://doi.org/10.7554/eLife.88818.1
+
+**Body organ segmentation:**
+> Uus, A. U., Hall, M., Grigorescu, I., Avena Zampieri, C., Egloff Collado, A., Payette, K., Matthew, J., Kyriakopoulou, V., Hajnal, J. V., Hutter, J., Rutherford, M. A., Deprez, M., Story, L. (2023) 3D T2w fetal body MRI: automated organ volumetry, growth charts and population-averaged atlas. medRxiv 2023.05.31.23290751; doi: https://doi.org/10.1101/2023.05.31.23290751
 
 
 Disclaimer
