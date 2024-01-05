@@ -1,11 +1,11 @@
-Scripts for automated SVRTK reconstruction dockers 
+Scripts for automated SVRTK processing dockers 
 ====================
 
-This repository contains the pipelines for [MONAI](https://github.com/Project-MONAI/MONAI)-based automated fetal MRI reconstruction [SVRTK dockers](https://hub.docker.com/r/fetalsvrtk/svrtk).
+This repository contains the pipelines for [MONAI](https://github.com/Project-MONAI/MONAI)-based automated fetal MRI analysis [SVRTK dockers](https://hub.docker.com/r/fetalsvrtk/svrtk).
 
 
 
-- The repository and code for automation of [SVR](https://github.com/SVRTK/SVRTK) reconstruction were designed and created by [Alena Uus](https://github.com/alenauus).
+- The repository and code for automation of [SVR](https://github.com/SVRTK/SVRTK) reconstruction and deep learning segmentaion were designed and created by [Alena Uus](https://github.com/alenauus).
 
 
 
@@ -34,7 +34,7 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 ```
 
 
-Development of SVRTK was supported by projects led by Prof Mary Rutherford, Dr Maria Deprez, Dr Jana Hutter, Dr Lisa Story and Prof Jo Hajnal.
+Development of SVRTK was supported by projects led by Prof Mary Rutherford, Dr Lisa Story, Dr Maria Deprez, Dr Jana Hutter and Prof Jo Hajnal.
 
 
 License
