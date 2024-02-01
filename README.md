@@ -16,9 +16,9 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 
 The auto pipelines are used in:
 
-- Integration via AIDE led by Tom Roberts: https://github.com/SVRTK/aide-svrtk
+- Integration via AIDE led by [Tom Roberts](https://github.com/tomaroberts): https://github.com/SVRTK/aide-svrtk
 
-- Integration via Gadgetron led by Sara Neves Silva: https://github.com/SVRTK/gadgetron-svrtk-integration
+- Integration via Gadgetron led by [Sara Neves Silva](https://github.com/saranevessilva): https://github.com/SVRTK/gadgetron-svrtk-integration
 
 
 **The automated SVRTK docker tag is _fetalsvrtk/svrtk:general_auto_amd_ :**
