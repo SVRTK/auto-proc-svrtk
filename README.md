@@ -5,7 +5,7 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 
 
 
-- The repository and code for automation of [SVR](https://github.com/SVRTK/SVRTK) reconstruction and deep learning segmentaion were designed and created by [Alena Uus](https://github.com/alenauus).
+- The repository and code for automation of [SVR](https://github.com/SVRTK/SVRTK) reconstruction and deep learning segmentation were designed and created by [Alena Uus](https://github.com/alenauus).
 
 
 
@@ -21,10 +21,19 @@ The auto pipelines are used in:
 - Integration via Gadgetron led by [Sara Neves Silva](https://github.com/saranevessilva): https://github.com/SVRTK/gadgetron-svrtk-integration
 
 
-**The automated SVRTK docker tag is _fetalsvrtk/svrtk:general_auto_amd_ :**
+Development of SVRTK was supported by projects led by Prof Mary Rutherford, Dr Lisa Story, Dr Maria Deprez, Dr Jana Hutter and Prof Jo Hajnal.
 
 
-**Input data requirements:**
+Auto processing 
+---------------
+
+
+**The automated SVRTK docker tag is _fetalsvrtk/svrtk:general_auto_amd_**
+
+
+**AUTOMATED 3D T2w BRAIN / BODY RECONSTRUCTION:**
+
+*Input data requirements:*
 - more than 5-6 stacks
 - full ROI coverage in all stacks
 - 21-40 weeks GA
@@ -34,7 +43,7 @@ The auto pipelines are used in:
 - 80 – 180ms TE
 - sufficient SNR and image quality
 
-**Output:**
+*Output:*
 - 0.8mm resolution (or as specified)
 - Standard radiological space
 
@@ -48,8 +57,36 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 
 ```
 
+**AUTOMATED 3D T2w BRAIN / BODY SEGMENTATION:**
 
-Development of SVRTK was supported by projects led by Prof Mary Rutherford, Dr Lisa Story, Dr Maria Deprez, Dr Jana Hutter and Prof Jo Hajnal.
+
+*Input data requirements:*
+- sufficient SNR and image quality
+- full ROI coverage
+- good quality 3D SVR / DSVR reconsruction
+- reorientation to the standard radiological atlas space
+- 21-38 weeks GA
+- no extreme shading artifacts
+- no extreme structural anomalies
+- 0.55 / 1.5 / 3T
+- 80 – 180ms TE
+
+
+```bash
+
+docker pull fetalsvrtk/svrtk:general_auto_amd
+
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-bounti-segmentation-fetal.sh /home/data/your_folder_with_brain_svr_t2_files  /home/data/output_folder_for_segmentations ; '
+
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-bet-segmentation-fetal.sh /home/data/your_folder_with_brain_svr_t2_files  /home/data/output_folder_for_segmentations ; '
+
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-body-organ-segmentation.sh /home/data/your_folder_with_body_dsvr_t2_files  /home/data/output_folder_for_segmentations ; ' 
+
+```
+
+
+
+
 
 
 License
