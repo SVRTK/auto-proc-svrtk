@@ -23,6 +23,21 @@ The auto pipelines are used in:
 
 **The automated SVRTK docker tag is _fetalsvrtk/svrtk:general_auto_amd_ :**
 
+
+**Input data requirements:**
+- more than 5-6 stacks
+- full ROI coverage in all stacks
+- 21-40 weeks GA
+- no extreme shading artifacts
+- singleton pregnancy
+- 0.55 / 1.5 / 3T
+- 80 – 180ms TE
+- sufficient SNR and image quality
+
+**Output:**
+- 0.8mm resolution (or as specified)
+- Standard radiological space
+
 ```bash
 
 docker pull fetalsvrtk/svrtk:general_auto_amd
