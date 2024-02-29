@@ -69,7 +69,7 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 - no extreme shading artifacts
 - no extreme structural anomalies
 - 0.55 / 1.5 / 3T
-- 80 – 180ms TE
+- 80 – 250ms TE
 
 
 ```bash
@@ -84,8 +84,27 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 
 ```
 
+**AUTOMATED REORIENTATION OF 3D T2w BRAIN / BODY RECONS:**
 
 
+*Input data requirements:*
+- sufficient SNR and image quality
+- full ROI coverage
+- no extreme shading artifacts
+- no extreme structural anomalies
+- 0.55 / 1.5 / 3T
+- 80 – 250ms TE
+
+
+```bash
+
+docker pull fetalsvrtk/svrtk:general_auto_amd
+
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-reorientation.sh /home/data/your_folder_with_brain_svr_t2_files  /home/data/output_folder_for_reoriented_images 0.5 1 0; '
+
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-body-reorientation.sh /home/data/your_folder_with_body_dsvr_t2_files  /home/data/output_folder_for_reoriented_images 0.5 1 0; '
+
+```
 
 
 
@@ -116,6 +135,12 @@ In case you found auto SVRTK useful please give appropriate credit to the softwa
 
 **Body organ segmentation:**
 > Uus, A. U., Hall, M., Grigorescu, I., Avena Zampieri, C., Egloff Collado, A., Payette, K., Matthew, J., Kyriakopoulou, V., Hajnal, J. V., Hutter, J., Rutherford, M. A., Deprez, M., Story, L. (2023) 3D T2w fetal body MRI: automated organ volumetry, growth charts and population-averaged atlas. medRxiv 2023.05.31.23290751; doi: https://doi.org/10.1101/2023.05.31.23290751
+
+**Auto brain reorientation:**
+> Uus, A. U., Hall, M., Payette, K., Hajnal, J. V., Deprez, M., Hutter, J., Rutherford, M. A., Story, L. (2023) Combined quantitative T2* map and structural T2- weighted tissue-specific analysis for fetal brain MRI: pilot automated pipeline. PIPPI MICCAI 2023 workshop, LNCS 14246.: https://doi.org/10.1007/978-3-031-45544-5_3
+
+**Auto thorax/body reorientation:**
+> Uus, A., Grigorescu, I., van Poppel, M., Steinweg, J. K., Roberts, T., Rutherford, M., Hajnal, J., Lloyd, D., Pushparajah, K. & Deprez, M. (2022) Automated 3D reconstruction of the fetal thorax in the standard atlas space from motion-corrupted MRI stacks for 21-36 weeks GA range. Medical Image Analysis, 80 (August 2022).: https://doi.org/10.1016/j.media.2022.102484
 
 
 Disclaimer
