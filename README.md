@@ -84,7 +84,7 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 
 ```
 
-**AUTOMATED REORIENTATION OF 3D T2w BRAIN / BODY RECONS:**
+**AUTOMATED REORIENTATION OF 3D T2w BRAIN / BODY RECONS TO STANDARD SPACE:**
 
 
 *Input data requirements:*
