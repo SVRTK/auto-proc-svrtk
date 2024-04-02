@@ -58,6 +58,12 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 #auto thorax reconstruction
 docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-thorax-reconstruction.sh /home/data/folder-with-files /home/data/out-thorax-recon-results 1 3.0 0.8 1 ; '
 
+```
+
+**0.55T low field reconstruction options:**
+
+```bash
+
 #0.55T auto brain reconstruction
 docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-055t-reconstruction.sh /home/data/folder-with-files /home/data/out-brain-recon-results 1 4.5 1.0 1 ; ' 
 
