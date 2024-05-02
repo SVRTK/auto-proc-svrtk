@@ -8,7 +8,7 @@
 # The auto SVRTK code and all scripts are distributed under the terms of the
 # [GNU General Public License v3.0: 
 # https://www.gnu.org/licenses/gpl-3.0.en.html. 
-#                       q3234567
+# 
 # This program is free software: you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
 # the Free Software Foundation version 3 of the License. 
@@ -39,7 +39,6 @@ source ~/.bashrc
 #echo "NOTE: UPDATE SOFTWARE PAHTS AS REQUIRED BEFORE RUNNING "
 #echo "NOTE: DOWNLOAD MONAI WEIGHTS INTO auto-proc-svrtk/trained_models FOLDER FROM https://gin.g-node.org/SVRTK/fetal_mri_network_weights"
 #
-#exit
 
 
 software_path=/home
@@ -63,14 +62,14 @@ test_dir=/bin/MIRTK
 if [ ! -d $test_dir ];then
     echo "ERROR: COULD NOT FIND MIRTK INSTALLED IN : " ${software_path}
     echo "PLEASE INSTALL OR UPDATE THE PATH software_path VARIABLE IN THE SCRIPT"
-    exit
+    exit 1 
 fi
 
 test_dir=${segm_path}/trained_models
 if [ ! -d $test_dir ];then
     echo "ERROR: COULD NOT FIND SEGMENTATION MODULE INSTALLED IN : " ${software_path}
     echo "PLEASE INSTALL OR UPDATE THE PATH software_path VARIABLE IN THE SCRIPT"
-    exit
+    exit 2 
 fi
 
 
@@ -87,7 +86,7 @@ test_dir=${default_run_dir}
 if [ ! -d $test_dir ];then
     echo "ERROR: COULD NOT CREATE THE PROCESSING FOLDER : " ${default_run_dir}
     echo "PLEASE CHECK THE PERMISSIONS OR UPDATE THE PATH default_run_dir VARIABLE IN THE SCRIPT"
-    exit
+    exit 3
 fi
 
 
@@ -103,18 +102,20 @@ echo "--------------------------------------------------------------------------
 echo "-----------------------------------------------------------------------------"
 echo
 
+default_settings=1
+
 if [ $# -ne 2 ] ; then
 
     if [ $# -ne 6 ] ; then
-        echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-brain-reconstruction.sh"
+        echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-brain-reconstruction-northh.sh"
         echo "            [FULL path to the folder with raw T2w stacks in .nii or .dcm, e.g., /home/data/test]"
         echo "            [FULL path to the folder for recon results, e.g., /home/data/out-test]"
         echo "            (optional) [motion correction mode (0 or 1): 0 - minor, 1 - >180 degree rotations] - default: 1"
-        echo "            (optional) [slice thickness] - default: 3.0"
-        echo "            (optional) [output recon resolution] - default: 0.8"
+        echo "            (optional) [slice thickness] - default: exact slice spacing or 2.5mm in case of slice overlap"
+        echo "            (optional) [output recon resolution] - default: 0.7mm (dx<1.0mm), 0.8mm (dx=[1.0-1.4]mm) or 1.0mm (dx>1.4mm) "
         echo "            (optional) [number of packages] - default: 1"
         echo
-        exit
+        exit 4
     else
         input_main_folder=$1
         output_main_folder=$2
@@ -122,6 +123,7 @@ if [ $# -ne 2 ] ; then
         default_thickness=$4
         recon_resolution=$5
         num_packages=$6
+        default_settings=0
     fi
     
 else
@@ -131,24 +133,25 @@ else
     default_thickness=3.0
     recon_resolution=0.8
     num_packages=1
+    default_settings=1
 fi
 
 
-echo " - input folder : " ${input_main_folder}
-echo " - output folder : " ${output_main_folder}
-echo " - motion correction mode : " ${motion_correction_mode}
-echo " - slice thickness : " ${default_thickness}
-echo " - output resolution : " ${recon_resolution}
+# echo " - input folder : " ${input_main_folder}
+# echo " - output folder : " ${output_main_folder}
+# echo " - motion correction mode : " ${motion_correction_mode}
+# echo " - slice thickness : " ${default_thickness}
+# echo " - output resolution : " ${recon_resolution}
 
 
-recon_roi=brain
+# recon_roi=brain
 
 
 test_dir=${input_main_folder}
 if [ ! -d $test_dir ];then
     echo
     echo "ERROR: NO FOLDER WITH THE INPUT FILES FOUND !!!!"
-    exit
+    exit 5
 fi
 
 
@@ -162,6 +165,7 @@ fi
 
 cd ${default_run_dir}
 main_dir=$(pwd)
+
 
 
 cp -r ${input_main_folder} ${default_run_dir}/input-files
@@ -192,8 +196,41 @@ if [ $number_of_stacks -eq 0 ];then
     echo "ERROR: NO INPUT .nii / .nii.gz FILES FOUND !!!!"
     echo "-----------------------------------------------------------------------------"
     echo
-    exit
+    exit 6
 fi
+
+
+
+
+echo 
+echo "-----------------------------------------------------------------------------"
+
+recon_roi=brain
+
+if [ $default_settings -eq 1 ]; then
+
+    echo " - estimating thickness and resolution parameters ... "
+    echo 
+    stack_names=$(ls ${input_main_folder}/*.nii*)
+    IFS=$'\n' read -rd '' -a all_stacks <<<"$stack_names"
+
+    default_thickness=$(/bin/MIRTK/build/lib/tools/guess-thickness ${all_stacks[0]})
+    recon_resolution=$(/bin/MIRTK/build/lib/tools/guess-resolution ${all_stacks[0]})
+
+fi 
+
+echo 
+echo " - input folder : " ${input_main_folder}
+echo " - output folder : " ${output_main_folder}
+echo " - motion correction mode : " ${motion_correction_mode}
+echo " - slice thickness : " ${default_thickness}
+echo " - output resolution : " ${recon_resolution}
+echo " - recon ROI : " ${recon_roi}
+echo 
+echo "-----------------------------------------------------------------------------"
+echo 
+
+
 
 mkdir ${default_run_dir}/org-files
 find ${input_main_folder}/ -name "*.nii*" -exec cp {} ${default_run_dir}/org-files  \;
@@ -355,7 +392,7 @@ if [ ${number_of_stacks} -eq 0 ];then
     echo "ERROR: GLOBAL CNN LOCALISATION DID NOT WORK !!!!"
     echo "-----------------------------------------------------------------------------"
     echo
-    exit
+    exit 7
 fi
 
 echo
@@ -453,7 +490,7 @@ if [ ${number_of_stacks} -eq 0 ];then
     echo "conda init bash"
     echo "conda activate FetalMRI_MONAI"
     echo
-    exit
+    exit 8
 fi
 
 echo
@@ -534,7 +571,7 @@ if [ $motion_correction_mode -eq 1 ]; then
         echo "ERROR: REO CNN LOCALISATION DID NOT WORK !!!!"
         echo "-----------------------------------------------------------------------------"
         echo
-        exit
+        exit 9
     fi
 
     echo
@@ -592,7 +629,7 @@ if [ $motion_correction_mode -eq 1 ]; then
             echo "ERROR: REORIENTATION DID NOT WORK !!!!"
             echo "-----------------------------------------------------------------------------"
             echo
-            exit
+            exit 10
         fi
         
         ${mirtk_path}/mirtk info out-dofs-to-templates/dof-to-atl-${jj}.dof
@@ -709,16 +746,7 @@ if [ $recon_roi = "brain" ]; then
         cp selected_template.nii.gz transf-selected_template.nii.gz
         ${mirtk_path}/mirtk crop-image transf-selected_template.nii.gz transf-selected_template.nii.gz transf-selected_template.nii.gz
     fi
-
-
-    number_of_stacks=1
-    res=128
-    monai_lab_num=1
     
-    echo " ... "
-
-    
-    # ${mirtk_path}/mirtk mask-image SVR-output-${recon_roi}.nii.gz average_mask_cnn.nii.gz   masked-SVR-output-${recon_roi}.nii.gz
     
     ${mirtk_path}/mirtk prepare-for-monai res-template-files/ template-files/ reo-template-info.json reo-svr-info.csv ${res} 1 transf-selected_template.nii.gz > tmp.log
 
@@ -727,12 +755,11 @@ if [ $recon_roi = "brain" ]; then
     mkdir monai-segmentation-results-template-bet
     python3 ${segm_path}/src/run_monai_atunet_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ reo-template-info.json ${main_dir}/monai-segmentation-results-template-bet ${res} ${monai_lab_num}
 
-    ${mirtk_path}/mirtk extract-connected-components monai-segmentation-results-template-bet/cnn-*  average_mask_cnn.nii.gz 
+    ${mirtk_path}/mirtk extract-connected-components monai-segmentation-results-template-bet/cnn-*  average_mask_cnn.nii.gz
     
     ${mirtk_path}/mirtk dilate-image average_mask_cnn.nii.gz average_mask_cnn.nii.gz -iterations 2
     ${mirtk_path}/mirtk erode-image average_mask_cnn.nii.gz average_mask_cnn.nii.gz -iterations 2
 
-    # cp ${main_dir}/monai-segmentation-results-template-bet/cnn* 
 
     echo
     echo "-----------------------------------------------------------------------------"
@@ -771,7 +798,7 @@ if [ $recon_roi = "brain" ]; then
         echo "ERROR: SVR RECONSTRUCTION DID NOT WORK !!!!"
         echo "-----------------------------------------------------------------------------"
         echo
-        exit
+        exit 11
     fi
     
     
@@ -815,7 +842,7 @@ if [ $recon_roi = "brain" ]; then
         echo "ERROR: REO CNN LOCALISATION DID NOT WORK !!!!"
         echo "-----------------------------------------------------------------------------"
         echo
-        exit
+        exit 12
     fi
     
     mkdir out-svr-reo-masks
@@ -837,7 +864,7 @@ if [ $recon_roi = "brain" ]; then
     ${mirtk_path}/mirtk resample-image ${template_path}/brain-ref-atlas-2022/ref-space-brain.nii.gz ref.nii.gz -size ${recon_resolution} ${recon_resolution} ${recon_resolution}
 
     ${mirtk_path}/mirtk transform-image SVR-output-${recon_roi}.nii.gz reo-SVR-output-${recon_roi}.nii.gz -target ref.nii.gz -dofin dof-to-atl-${recon_roi}.dof -interp BSpline
-    ${mirtk_path}/mirtk threshold-image reo-SVR-output-${recon_roi}.nii.gz tmp-m.nii.gz 0.01 > tmp.txt 
+    ${mirtk_path}/mirtk threshold-image reo-SVR-output-${recon_roi}.nii.gz tmp-m.nii.gz 0.01 > tmp.txt
     ${mirtk_path}/mirtk crop-image reo-SVR-output-${recon_roi}.nii.gz tmp-m.nii.gz reo-SVR-output-${recon_roi}.nii.gz
     ${mirtk_path}/mirtk nan reo-SVR-output-${recon_roi}.nii.gz 100000
 
@@ -852,7 +879,7 @@ if [ $recon_roi = "brain" ]; then
         echo "ERROR: REORIENTATION OF RECONSTRUCTED IMAGE DID NOT WORK !!!!"
         echo "-----------------------------------------------------------------------------"
         echo
-        exit
+        exit 13
     fi
     
     test_file=reo-SVR-output-${recon_roi}.nii.gz
@@ -879,7 +906,7 @@ if [ $recon_roi = "brain" ]; then
         echo "note: you can still find the recon files in : " ${main_dir}
         echo "-----------------------------------------------------------------------------"
         echo
-        exit
+        exit 14
     fi
 
 fi

@@ -535,9 +535,9 @@ if [ $motion_correction_mode -eq 1 ]; then
     monai_lab_num=5
     ${mirtk_path}/mirtk prepare-for-monai res-cropped-files/ again-cropped-files/ reo-cropped-stack-info.json reo-cropped-stack-info.csv ${res} ${number_of_stacks} masked-cropped-files-brain/*nii* > tmp.log
     
-    # current_monai_check_path=${model_path}/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab
+    current_monai_check_path=${model_path}/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab
 
-    current_monai_check_path=${model_path}/monai-checkpoints-unet-brain-raw-reo-5-lab-055t
+    # current_monai_check_path=${model_path}/monai-checkpoints-unet-brain-raw-reo-5-lab-055t
     
     mkdir monai-segmentation-results-stack-reo
     python3 ${segm_path}/src/run_monai_unet_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ reo-cropped-stack-info.json ${main_dir}/monai-segmentation-results-stack-reo ${res} ${monai_lab_num}
