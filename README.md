@@ -144,7 +144,10 @@ Citation and acknowledgements
 
 In case you found auto SVRTK useful please give appropriate credit to the software and [SVRTK dockers](https://hub.docker.com/r/fetalsvrtk/svrtk).
 
-**Auto brain reconstruction (please include both citations):**
+**Auto brain reconstruction (please include all three citations):**
+
+> Uus, A. U., Neves Silva, S., Aviles Verdera, J., Payette, K., Hall, M., Colford, K., Luis, A., Sousa, H. S., Ning, Z., Roberts, T., McElroy, S.,  Deprez, M., Hajnal, J. V., Rutherford, M. A., Story, L., Hutter, J. (2024) Scanner-based real-time 3D brain+body slice-to-volume reconstruction for T2-weighted 0.55T low field fetal MRI. medRxiv 2024.04.22.24306177: https://doi.org/10.1101/2024.04.22.24306177
+
 > Uus, A. U., Hall, M., Payette, K., Hajnal, J. V., Deprez, M., Hutter, J., Rutherford, M. A., Story, L. (2023) Combined quantitative T2* map and structural T2- weighted tissue-specific analysis for fetal brain MRI: pilot automated pipeline. PIPPI MICCAI 2023 workshop, LNCS 14246.: https://doi.org/10.1007/978-3-031-45544-5_3
 
 > Kuklisova-Murgasova, M., Quaghebeur, G., Rutherford, M. A., Hajnal, J. V., & Schnabel, J. A. (2012). Reconstruction of fetal brain MRI with intensity matching and complete outlier removal. Medical Image Analysis, 16(8), 1550–1564.: https://doi.org/10.1016/j.media.2012.07.004
