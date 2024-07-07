@@ -1,11 +1,11 @@
 numpy
 certifi
 # intel-openmp
-libtiff
 # mkl
 # mkl-service
 # mkl_fft
 # mkl_random
+libtiff
 ninja
 olefile
 readline
@@ -13,7 +13,7 @@ setuptools
 six
 tk
 wheel
-zstd
+zstd 
 click
 cycler
 einops
