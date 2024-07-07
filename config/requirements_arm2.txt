@@ -8,7 +8,7 @@ certifi
 libtiff
 ninja
 olefile
-readline
+# readline
 setuptools
 six
 tk
