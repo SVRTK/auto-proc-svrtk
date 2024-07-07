@@ -2,10 +2,10 @@ numpy
 certifi
 # intel-openmp
 libtiff
-mkl
-mkl-service
-mkl_fft
-mkl_random
+# mkl
+# mkl-service
+# mkl_fft
+# mkl_random
 ninja
 olefile
 readline
