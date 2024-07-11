@@ -154,7 +154,7 @@ echo " ... "
 
 ${mirtk_path}/invert-dof ${proc}/aff-to-atl-${ga}-${s}.dof ${proc}/inv-aff-to-atl-${ga}-${s}.dof
  
-${mirtk_path}/transform-image ${proc}/${s}-${ga}-bio-lab.nii.gz ${proc}/res-org-${s}-bio-lab.nii.gz -dofin ${proc}/inv-aff-to-atl-${ga}-${s}.dof ${proc}/rigid-to-atl-${ga}-${s}.dof -target ${res_reo_t2} -labels
+${mirtk_path}/transform-image ${proc}/${s}-${ga}-bio-lab.nii.gz ${proc}/res-org-${s}-bio-lab.nii.gz -dofin ${proc}/rigid-to-atl-${ga}-${s}.dof  ${proc}/inv-aff-to-atl-${ga}-${s}.dof -target ${res_reo_t2} -labels
 
 
 ${mrtrix_path}/mrcalc ${proc}/res-org-${s}-bio-lab.nii.gz 0 -mult ${proc}/repl-res-org-${s}-bio-lab.nii.gz -force -quiet
@@ -187,8 +187,12 @@ echo
 ${mirtk_path}/label-biometry-brain ${bio_csv} 1 ${proc}/repl-res-org-${s}-bio-lab.nii.gz
 
 
+
+chmod 1777 ${bio_csv}
+chmod 1777 ${bio}
+chmod 1777 ${res_reo_t2}
  
- echo
+echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo
