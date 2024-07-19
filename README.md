@@ -74,7 +74,7 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 
 
 
-**AUTOMATED 3D T2w BRAIN / BODY SEGMENTATION:**
+**AUTOMATED 3D T2w BRAIN / BODY / ... SEGMENTATION:**
 
 
 *Input data requirements:*
@@ -101,6 +101,9 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 
 #auto body organ segmentation
 docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-body-organ-segmentation.sh /home/data/your_folder_with_body_dsvr_t2_files  /home/data/output_folder_for_segmentations ; ' 
+
+#auto face/head segmentation
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-face-segmentation-fetal.sh /home/data/your_folder_with_head_svr_t2_files  /home/data/output_folder_for_segmentations ; '
 
 ```
 
