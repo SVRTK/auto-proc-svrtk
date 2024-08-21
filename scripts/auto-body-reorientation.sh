@@ -367,7 +367,9 @@ ${mirtk_path}/mirtk register-landmarks ${thorax_reo_template}/thorax-atlas.nii.g
 
     ${mirtk_path}/mirtk transform-image ${all_org_stacks[$i]} ${all_org_stacks[$i]} -target res-ref.nii.gz -dofin dofs-to-atlas/dof-to-atl-${jj}.dof -interp BSpline
     
-    ${mirtk_path}/mirtk crop-image ${all_org_stacks[$i]} ${all_org_stacks[$i]} ${all_org_stacks[$i]}
+    ${mirtk_path}/mirtk threshold-image ${all_org_stacks[$i]} m.nii.gz 0.5 > tmp.log
+    
+    ${mirtk_path}/mirtk crop-image ${all_org_stacks[$i]}  m.nii.gz  ${all_org_stacks[$i]}
     
     ${mirtk_path}/mirtk nan ${all_org_stacks[$i]}  100000
 

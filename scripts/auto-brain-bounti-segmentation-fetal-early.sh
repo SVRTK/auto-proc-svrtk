@@ -19,22 +19,16 @@
 # See the GNU General Public License for more details.
 #
 
-
 echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo
-
 
 source ~/.bashrc
 
-#source /root/.bashrc
-
 #eval "$(conda shell.bash hook)"
-
 #conda init bash
 
-#conda init bash
 #conda activate Segmentation_FetalMRI_MONAI
 
 #UPDATE AS REQUIRED BEFORE RUNNING !!!!
@@ -63,7 +57,18 @@ if [[ ! -d ${test_dir} ]];then
     exit
 fi
 
+#fetal
+monai_check_path_bet_attunet=${segm_path}/trained_models/monai-checkpoints-attunet-brain-bet-1-lab
+monai_check_path_bounti_unet=${segm_path}/trained_models/monai-checkpoints-unet-early_brain-bounti-19-lab
+monai_check_path_bounti_attunet=${segm_path}/trained_models/monai-checkpoints-red-attunet-early_brain_bounti-19-lab
 
+
+
+
+##neo
+#monai_check_path_bet_neo_attunet=${segm_path}/trained_models/monai-checkpoints-attunet-neo-brain-bet-1-lab
+#monai_check_path_bounti_neo_unet=${segm_path}/trained_models/monai-checkpoints-unet-neo-brain-bounti-19-lab
+#
 
 test_dir=${default_run_dir}
 if [[ ! -d ${test_dir} ]];then
@@ -85,47 +90,29 @@ echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo
-echo "SVRTK for fetal MRI (KCL): auto reorientation of fetal DSVR thorax T2w recons"
+echo "SVRTK for fetal MRI (KCL): auto brain tissue segmentation for 3D SVR SSTSE / HASTE T2w fetal MRI"
 echo "Source code: https://github.com/SVRTK/auto-proc-svrtk"
 echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo
 
-
-out_res=0.75
-out_type=0
-out_scale=0
-
-if [[ $# -ne 5 ]] ; then
-
-   if [[ $# -ne 2 ]] ; then
-
- 	echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-thorax-reorientation.sh"
- 	echo "            [full path to the folder with T2w DSVR recons]"
- 	echo "            [full path to the folder for reoriented results]"
- 	echo "            [OPTIONAL: out resolution in mm] | DEFAULT: 0.75" 
- 	echo "            [OPTIONAL: out type: 0 - float / 1 - short] | DEFAULT: 0 " 
- 	echo "            [OPTIONAL: out scale: 0 - original / 1 - 0-1000] | DEFAULT : 0" 
- 	exit
-
-   else
- 	input_main_folder=$1
-	output_main_folder=$2
-   fi 
-else 
-
-   input_main_folder=$1
-   output_main_folder=$2
-   out_res=$3
-   out_type=$4 
-   out_scale=$5
-
-fi 
+if [[ $# -ne 2 ]] ; then
+    echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-brain-bounti-segmentation-fetal.sh"
+    echo "            [full path to the folder with 3D T2w SVR recons]"
+    echo "            [full path to the folder for segmentation results]"
+    echo
+    echo "note: tmp processing files are stored in /home/tmp_proc"
+    echo
+    exit
+else
+    input_main_folder=$1
+    output_main_folder=$2
+fi
 
 
 echo " - input folder : " ${input_main_folder}
-echo " - output folder : " ${input_main_folder}
+echo " - output folder : " ${output_main_folder}
 
 
 test_dir=${input_main_folder}
@@ -149,6 +136,20 @@ main_dir=$(pwd)
 
 cp -r ${input_main_folder} ${default_run_dir}/input-files
 input_main_folder=${default_run_dir}/input-files
+
+
+number_of_stacks=$(find ${input_main_folder}/ -name "*.dcm" | wc -l)
+if [ $number_of_stacks -gt 0 ];then
+    echo
+    echo "-----------------------------------------------------------------------------"
+    echo "FOUND .dcm FILES - CONVERTING TO .nii.gz !!!!"
+    echo "-----------------------------------------------------------------------------"
+    echo
+    cd ${input_main_folder}/
+    ${dcm2niix_path}/dcm2niix -z y .
+    cd ${main_dir}/
+fi
+
 
 
 number_of_stacks=$(find ${input_main_folder}/ -name "*.nii*" | wc -l)
@@ -184,16 +185,25 @@ IFS=$'\n' read -rd '' -a all_stacks <<<"$stack_names"
 
 echo
 echo "-----------------------------------------------------------------------------"
-echo "REMOVING NAN & NEGATIVE/EXTREME VALUES & SPLITTING INTO DYNAMICS..."
+echo "CROPPING & REMOVING NAN & NEGATIVE/EXTREME VALUES & "
+echo "TRANSFORMING TO THE STANDARD SPACE & REMOVING DYNAMICS..."
 echo "-----------------------------------------------------------------------------"
 echo
 
 for ((i=0;i<${#all_stacks[@]};i++));
 do
     echo " - " ${i} " : " ${all_stacks[$i]}
-    ${mirtk_path}/mirtk nan ${all_stacks[$i]} 100000
-    ${mirtk_path}/mirtk extract-image-region ${all_stacks[$i]} ${all_stacks[$i]} -split t
-    rm ${all_stacks[$i]}
+#    ${mirtk_path}/mirtk nan ${all_stacks[$i]} 100000
+    ${mirtk_path}/mirtk extract-image-region ${all_stacks[$i]} ${all_stacks[$i]} -Rt1 0 -Rt2 0
+    ${mirtk_path}/mirtk threshold-image ${all_stacks[$i]} ../th.nii.gz 0.005 > ../tmp.txt
+    ${mirtk_path}/mirtk crop-image ${all_stacks[$i]} ../th.nii.gz ${all_stacks[$i]}
+    
+    ${mirtk_path}/mirtk edit-image ${template_path}/brain-ref-space.nii.gz ../ref.nii.gz -copy-origin ${all_stacks[$i]}
+    ${mirtk_path}/mirtk transform-image ${all_stacks[$i]} ${all_stacks[$i]} -target ../ref.nii.gz -interp Linear
+    ${mirtk_path}/mirtk crop-image ${all_stacks[$i]} ../th.nii.gz ${all_stacks[$i]}
+    ${mirtk_path}/mirtk nan ${all_stacks[$i]} 1000000
+    
+    
 done
 
 stack_names=$(ls *.nii*)
@@ -204,14 +214,14 @@ echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo
-echo "REORIENTATION OF DSVR THORAX RECONS..."
+echo "3D BOUNTI TISSUE SEGMENTATION OF 3D SVR T2W BRAIN RECONS..."
 echo
 
 cd ${main_dir}
 
 echo
 echo "-----------------------------------------------------------------------------"
-echo "GLOBAL THORAX LOCALISATION ..."
+echo "GLOBAL BET ..."
 echo "-----------------------------------------------------------------------------"
 echo
 
@@ -225,13 +235,11 @@ monai_lab_num=1
 number_of_stacks=$(find org-files-preproc/ -name "*.nii*" | wc -l)
 ${mirtk_path}/mirtk prepare-for-monai res-stack-files/ stack-files/ stack-info.json stack-info.csv ${res} ${number_of_stacks} org-files-preproc/*nii* > tmp.log
 
-current_monai_check_path=${segm_path}/trained_models/monai-checkpoints-unet-thorax-1-lab
-
-mkdir monai-segmentation-results-global
-python3 ${segm_path}/src/run_monai_unet_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ stack-info.json ${main_dir}/monai-segmentation-results-global ${res} ${monai_lab_num}
+mkdir monai-segmentation-results-bet
+python3 ${segm_path}/src/run_monai_atunet_segmentation-2022.py ${main_dir}/ ${monai_check_path_bet_attunet}/ stack-info.json ${main_dir}/monai-segmentation-results-bet ${res} ${monai_lab_num}
 
 
-number_of_stacks=$(find monai-segmentation-results-global/ -name "*.nii*" | wc -l)
+number_of_stacks=$(find monai-segmentation-results-bet/ -name "*.nii*" | wc -l)
 if [[ ${number_of_stacks} -eq 0 ]];then
     echo
     echo "-----------------------------------------------------------------------------"
@@ -244,20 +252,19 @@ fi
 
 echo
 echo "-----------------------------------------------------------------------------"
-echo "EXTRACTING LABELS AND MASKING ..."
+echo "EXTRACTING LABELS AND MASKING..."
 echo "-----------------------------------------------------------------------------"
 echo
 
-out_mask_names=$(ls monai-segmentation-results-global/cnn-*.nii*)
+out_mask_names=$(ls monai-segmentation-results-bet/cnn-*.nii*)
 IFS=$'\n' read -rd '' -a all_masks <<<"$out_mask_names"
 
 stack_names=$(ls org-files-preproc/*.nii*)
 IFS=$'\n' read -rd '' -a all_stacks <<<"$stack_names"
 
 
-mkdir global-masks
-
-mkdir masked-cropped-stacks-thorax
+mkdir masked-stacks
+mkdir bet-masks
 
 for ((i=0;i<${#all_stacks[@]};i++));
 do
@@ -265,138 +272,97 @@ do
     
     jj=$((${i}+1000))
     
-    ${mirtk_path}/mirtk extract-label ${all_masks[$i]} global-masks/mask-${jj}.nii.gz 1 1
+    ${mirtk_path}/mirtk extract-label ${all_masks[$i]} bet-masks/mask-${jj}.nii.gz 1 1
+    ${mirtk_path}/mirtk extract-connected-components bet-masks/mask-${jj}.nii.gz bet-masks/mask-${jj}.nii.gz
+    ${mirtk_path}/mirtk transform-image bet-masks/mask-${jj}.nii.gz bet-masks/mask-${jj}.nii.gz -target ${all_stacks[$i]} -labels
+    ${mirtk_path}/mirtk dilate-image bet-masks/mask-${jj}.nii.gz dl.nii.gz -iterations 4
+    ${mirtk_path}/mirtk erode-image dl.nii.gz dl.nii.gz -iterations 2
+    ${mirtk_path}/mirtk mask-image ${all_stacks[$i]} dl.nii.gz masked-stacks/masked-stack-${jj}.nii.gz
+    ${mirtk_path}/mirtk crop-image masked-stacks/masked-stack-${jj}.nii.gz dl.nii.gz masked-stacks/masked-stack-${jj}.nii.gz
 
-    ${mirtk_path}/mirtk erode-image global-masks/mask-${jj}.nii.gz global-masks/mask-${jj}.nii.gz -iterations 2
+    # ${mirtk_path}/mirtk N4 -i masked-stacks/masked-stack-${jj}.nii.gz -x dl.nii.gz -o tmp.nii.gz  -c "[50x50x50,0.001]" -s 2 -b "[100,3]" -t "[0.15,0.01,200]" > tmp.txt
+    # cp tmp.nii.gz  masked-stacks/masked-stack-${jj}.nii.gz
 
-    ${mirtk_path}/mirtk extract-connected-components global-masks/mask-${jj}.nii.gz global-masks/mask-${jj}.nii.gz
-    
-    ${mirtk_path}/mirtk dilate-image global-masks/mask-${jj}.nii.gz global-masks/mask-${jj}.nii.gz -iterations 2
-    
-    ${mirtk_path}/mirtk mask-image ${all_stacks[$i]} global-masks/mask-${jj}.nii.gz masked-cropped-stacks-thorax/stack-${jj}.nii.gz
-    
-    ${mirtk_path}/mirtk crop-image masked-cropped-stacks-thorax/stack-${jj}.nii.gz global-masks/mask-${jj}.nii.gz masked-cropped-stacks-thorax/stack-${jj}.nii.gz
- 
 done
 
 
-
-
 echo
 echo "-----------------------------------------------------------------------------"
-echo "RUNNING LANDMARK UNET ..."
+echo "BOUNTI BRAIN TISSUE SEGMENTATION ..."
 echo "-----------------------------------------------------------------------------"
 echo
 
-number_of_stacks=$(ls masked-cropped-stacks-thorax/*.nii* | wc -l)
-stack_names=$(ls masked-cropped-stacks-thorax/*.nii*)
+number_of_stacks=$(ls masked-stacks/*.nii* | wc -l)
+stack_names=$(ls masked-stacks/*.nii*)
 
 echo " ... "
 
-res=128
-monai_lab_num=4 
-number_of_stacks=$(find org-files-preproc/ -name "*.nii*" | wc -l)
-${mirtk_path}/mirtk prepare-for-monai res-reo-files/ reo-files/ stack-info.json stack-info.csv ${res} ${number_of_stacks} masked-cropped-stacks-thorax/*nii* > tmp.log
+res=256
+monai_lab_num=19
+number_of_stacks=$(find masked-stacks/ -name "*.nii*" | wc -l)
+${mirtk_path}/mirtk prepare-for-monai res-masked-stack-files/ masked-stack-files/ masked-stack-info.json masked-stack-info.csv ${res} ${number_of_stacks} masked-stacks/*nii* > tmp.log
 
-current_monai_check_path=${segm_path}/trained_models/monai-checkpoints-unet-thorax-reo-4-lab-cmr
+mkdir monai-segmentation-results-bounti
 
-mkdir monai-segmentation-results-reo
-python3 ${segm_path}/src/run_monai_unet_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ stack-info.json ${main_dir}/monai-segmentation-results-reo ${res} ${monai_lab_num}
+python3 ${segm_path}/src/run_monai_comb_red_atunet_unet_segmentation-2022-lr.py ${main_dir}/ ${monai_check_path_bounti_attunet}/ ${monai_check_path_bounti_unet}/ masked-stack-info.json ${main_dir}/monai-segmentation-results-bounti ${res} ${monai_lab_num}
 
 
-number_of_stacks=$(find monai-segmentation-results-reo/ -name "*.nii*" | wc -l)
+
+number_of_stacks=$(find monai-segmentation-results-bounti/ -name "*.nii*" | wc -l)
 if [[ ${number_of_stacks} -eq 0 ]];then
     echo
     echo "-----------------------------------------------------------------------------"
-    echo "ERROR: REO CNN LOCALISATION DID NOT WORK !!!!"
+    echo "ERROR: BOUNTI SEGMENTATION DID NOT WORK !!!!"
     echo "-----------------------------------------------------------------------------"
     echo
     exit
 fi
 
+
+
 echo
 echo "-----------------------------------------------------------------------------"
-echo "EXTRACTING LABELS AND REORIENTING..."
+echo "EXTRACTING LABELS AND TRANSFORMING TO THE ORIGINAL SPACE ..."
 echo "-----------------------------------------------------------------------------"
 echo
 
-out_mask_names=$(ls monai-segmentation-results-reo/cnn-*.nii*)
+out_mask_names=$(ls monai-segmentation-results-bounti/cnn-*.nii*)
 IFS=$'\n' read -rd '' -a all_masks <<<"$out_mask_names"
 
-org_stack_names=$(ls org-files-preproc/*.nii*)
-IFS=$'\n' read -rd '' -a all_org_stacks <<<"$org_stack_names"
+stack_names=$(ls org-files/*.nii*)
+IFS=$'\n' read -rd '' -a all_stacks <<<"$stack_names"
 
 
-mkdir reo-results
-mkdir out-svr-reo-masks
-mkdir dofs-to-atlas
+mkdir bounti-masks
 
-
-thorax_reo_template=${template_path}/thorax-reo-template
-${mirtk_path}/mirtk init-dof init.dof
-
-
-${mirtk_path}/mirtk resample-image ${thorax_reo_template}/thorax-ref.nii.gz res-ref.nii.gz -size ${out_res} ${out_res} ${out_res}
-
-    
-for ((i=0;i<${#all_org_stacks[@]};i++));
+for ((i=0;i<${#all_stacks[@]};i++));
 do
-    echo " - " ${i} " : " ${all_org_stacks[$i]} ${all_masks[$i]}
+    echo " - " ${i} " : " ${all_stacks[$i]} ${all_masks[$i]}
     
     jj=$((${i}+1000))
-
-    for ((q=1;q<5;q++));
-    do
-        ${mirtk_path}/mirtk extract-label ${all_masks[$i]} out-svr-reo-masks/mask-${jj}-${q}.nii.gz ${q} ${q}
-        ${mirtk_path}/mirtk dilate-image out-svr-reo-masks/mask-${jj}-${q}.nii.gz out-svr-reo-masks/mask-${jj}-${q}.nii.gz -iterations 1
-        ${mirtk_path}/mirtk erode-image out-svr-reo-masks/mask-${jj}-${q}.nii.gz out-svr-reo-masks/mask-${jj}-${q}.nii.gz -iterations 1
-        ${mirtk_path}/mirtk extract-connected-components out-svr-reo-masks/mask-${jj}-${q}.nii.gz out-svr-reo-masks/mask-${jj}-${q}.nii.gz
-    done
-
-    z1=1; z2=2; z3=3; z4=4; n_roi=4;
-
     
-
-${mirtk_path}/mirtk register-landmarks ${thorax_reo_template}/thorax-atlas.nii.gz ${all_org_stacks[$j]} init.dof dofs-to-atlas/dof-to-atl-${jj}.dof ${n_roi} ${n_roi}  ${thorax_reo_template}/thorax-reo-atlas-label-${z1}.nii.gz ${thorax_reo_template}/thorax-reo-atlas-label-${z2}.nii.gz ${thorax_reo_template}/thorax-reo-atlas-label-${z3}.nii.gz ${thorax_reo_template}/thorax-reo-atlas-label-${z4}.nii.gz out-svr-reo-masks/mask-${jj}-${z1}.nii.gz out-svr-reo-masks/mask-${jj}-${z2}.nii.gz out-svr-reo-masks/mask-${jj}-${z3}.nii.gz out-svr-reo-masks/mask-${jj}-${z4}.nii.gz  > tmp.log
-
-
+    echo
     
-    ${mirtk_path}/mirtk info dofs-to-atlas/dof-to-atl-${jj}.dof
+    ${mirtk_path}/mirtk transform-image ${all_masks[$i]} ${all_masks[$i]} -target ${all_stacks[$i]} -labels
+    ${mirtk_path}/mirtk transform-and-rename ${all_stacks[$i]} ${all_masks[$i]} "-mask-brain_bounti-"${monai_lab_num} ${main_dir}/bounti-masks
     
-    echo " ... "
-
-    ${mirtk_path}/mirtk transform-image ${all_org_stacks[$i]} ${all_org_stacks[$i]} -target res-ref.nii.gz -dofin dofs-to-atlas/dof-to-atl-${jj}.dof -interp BSpline
+    ${mirtk_path}/mirtk transform-image bet-masks/mask-${jj}.nii.gz bet-masks/mask-${jj}.nii.gz  -target ${all_stacks[$i]} -labels
+    ${mirtk_path}/mirtk transform-and-rename ${all_stacks[$i]} bet-masks/mask-${jj}.nii.gz "-mask-bet-1" ${main_dir}/bounti-masks
     
-    ${mirtk_path}/mirtk threshold-image ${all_org_stacks[$i]} m.nii.gz 0.5 > tmp.log
-    
-    ${mirtk_path}/mirtk crop-image ${all_org_stacks[$i]} m.nii.gz ${all_org_stacks[$i]}
-    
-    ${mirtk_path}/mirtk nan ${all_org_stacks[$i]}  100000
+    echo
 
-
-    if [[ ${out_scale} -eq 1 ]];then
-	${mirtk_path}/mirtk convert-image ${all_org_stacks[$i]} ${all_org_stacks[$i]} -rescale 0 1000 
-    fi 
-    
-    if [[ ${out_type} -eq 1 ]];then
-	${mirtk_path}/mirtk convert-image ${all_org_stacks[$i]} ${all_org_stacks[$i]} -short 
-    fi 
-
-
-    ${mirtk_path}/mirtk transform-and-rename ${all_org_stacks[$i]} ${all_org_stacks[$i]}  "_reo" ${main_dir}/reo-results
-        
-        
 done
 
 
-number_of_final_files=$(ls ${main_dir}/reo-results/*.nii* | wc -l)
+
+number_of_final_files=$(ls ${main_dir}/bounti-masks/*.nii* | wc -l)
 if [[ ${number_of_final_files} -ne 0 ]];then
 
-    cp -r reo-results/*.nii* ${output_main_folder}/
+    cp -r bounti-masks/*.nii* ${output_main_folder}/
     
 
     echo "-----------------------------------------------------------------------------"
-    echo "Reorientation results are in the output folder : " ${output_main_folder}
+    echo "Segmentation results are in the output folder : " ${output_main_folder}
     echo "-----------------------------------------------------------------------------"
         
 else
