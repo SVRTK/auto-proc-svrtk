@@ -93,6 +93,13 @@ echo
 echo "SVRTK for fetal MRI (KCL): auto head/face segmentation for 3D SVR SSTSE / HASTE T2w fetal MRI"
 echo "Source code: https://github.com/SVRTK/auto-proc-svrtk"
 echo
+echo "Please cite: Matthew, J., Uus, A., de Souza, L., Wright, R., Fukami-Gartner, A., "
+echo "Priego, G., Saija, C., Deprez, M., Collado, A. E., Hutter, J., Story, L., "
+echo "Malamateniou, C., Rhode, K., Hajnal, J., & Rutherford, M. A. (2024). "
+echo "Craniofacial phenotyping with fetal MRI: a feasibility study of 3D visualisation, "
+echo "segmentation, surface-rendered and physical models. BMC Medical Imaging, 24(1), 52."
+echo "https://doi.org/10.1186/s12880-024-01230-7"
+echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo
@@ -236,7 +243,7 @@ number_of_stacks=$(find org-files-preproc/ -name "*.nii*" | wc -l)
 ${mirtk_path}/mirtk prepare-for-monai res-stack-files/ stack-files/ stack-info.json stack-info.csv ${res} ${number_of_stacks} org-files-preproc/*nii* > tmp.log
 
 mkdir monai-segmentation-results-bet
-python3 ${segm_path}/src/run_monai_atunet_segmentation-2022.py ${main_dir}/ ${monai_check_path_bet_attunet}/ stack-info.json ${main_dir}/monai-segmentation-results-bet ${res} ${monai_lab_num}
+python3 ${segm_path}/src/run_monai_atunet_segmentation-2022.py ${main_dir}/ ${monai_check_path_face_attunet}/ stack-info.json ${main_dir}/monai-segmentation-results-bet ${res} ${monai_lab_num}
 
 
 number_of_stacks=$(find monai-segmentation-results-bet/ -name "*.nii*" | wc -l)

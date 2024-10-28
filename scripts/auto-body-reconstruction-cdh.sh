@@ -107,6 +107,18 @@ echo
 echo "SVRTK for fetal MRI (KCL): auto body DSVR reconstruction for TSE T2w fetal MRI"
 echo "Source code: https://github.com/SVRTK/auto-proc-svrtk"
 echo
+echo "Please cite: Uus, A. U., Neves Silva, S., Aviles Verdera, J., Payette, K.,"
+echo "Hall, M., Colford, K., Luis, A., Sousa, H. S., Ning, Z., Roberts, T., McElroy, S.,"
+echo "Deprez, M., Hajnal, J. V., Rutherford, M. A., Story, L., Hutter, J. (2024) "
+echo "Scanner-based real-time 3D brain+body slice-to-volume reconstruction for "
+echo "T2-weighted 0.55T low field fetal MRI. medRxiv 2024.04.22.24306177:"
+echo "https://doi.org/10.1101/2024.04.22.24306177"
+echo
+echo "Uus, A., Zhang, T., Jackson, L., Roberts, T., Rutherford, M., Hajnal, J.V., "
+echo "Deprez, M. (2020). Deformable Slice-to-Volume Registration for Motion Correction "
+echo "in Fetal Body MRI and Placenta. IEEE Transactions on Medical Imaging, 39(9), 2750-2759:"
+echo "http://dx.doi.org/10.1109/TMI.2020.2974844"
+echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo

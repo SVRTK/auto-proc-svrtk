@@ -1,23 +1,27 @@
 #!/usr/bin/env bash -l
 
 #
-# Auto SVRTK : deep learning automation for SVRTK reconstruction for fetal MRI
+# Auto SVRTK : deep learning automation for fetal MRI analysis
 #
 # Copyright 2018- King's College London
 #
+# The code in https://github.com/SVRTK/auto-proc-svrtk repository
+# was designed and created by Alena Uus https://github.com/alenauus
+#
 # The auto SVRTK code and all scripts are distributed under the terms of the
-# [GNU General Public License v3.0: 
-# https://www.gnu.org/licenses/gpl-3.0.en.html. 
-# 
-# This program is free software: you can redistribute it and/or modify 
-# it under the terms of the GNU General Public License as published by 
-# the Free Software Foundation version 3 of the License. 
-# 
-# This software is distributed in the hope that it will be useful, 
-# but WITHOUT ANY WARRANTY; without even the implied warranty of 
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+# [GNU General Public License v3.0:
+# https://www.gnu.org/licenses/gpl-3.0.en.html.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation version 3 of the License.
+#
+# This software is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the GNU General Public License for more details.
 #
+
 
 
 echo
@@ -87,6 +91,19 @@ echo "--------------------------------------------------------------------------
 echo
 echo "SVRTK for fetal MRI (KCL): auto reorientation of fetal DSVR thorax T2w recons"
 echo "Source code: https://github.com/SVRTK/auto-proc-svrtk"
+echo
+echo "Please cite: Uus, A. U., Neves Silva, S., Aviles Verdera, J., Payette, K.,"
+echo "Hall, M., Colford, K., Luis, A., Sousa, H. S., Ning, Z., Roberts, T., McElroy, S.,"
+echo "Deprez, M., Hajnal, J. V., Rutherford, M. A., Story, L., Hutter, J. (2024) "
+echo "Scanner-based real-time 3D brain+body slice-to-volume reconstruction for "
+echo "T2-weighted 0.55T low field fetal MRI. medRxiv 2024.04.22.24306177:"
+echo "https://doi.org/10.1101/2024.04.22.24306177"
+echo
+echo "Uus, A., Grigorescu, I., van Poppel, M., Steinweg, J. K., Roberts, T., "
+echo "Rutherford, M., Hajnal, J., Lloyd, D., Pushparajah, K. & Deprez, M. (2022) "
+echo "Automated 3D reconstruction of the fetal thorax in the standard atlas space "
+echo "from motion-corrupted MRI stacks for 21-36 weeks GA range. Medical Image Analysis, "
+echo "80 (August 2022).: https://doi.org/10.1016/j.media.2022.102484"
 echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"

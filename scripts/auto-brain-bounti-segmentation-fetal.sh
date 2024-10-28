@@ -90,6 +90,13 @@ echo
 echo "SVRTK for fetal MRI (KCL): auto brain tissue segmentation for 3D SVR SSTSE / HASTE T2w fetal MRI"
 echo "Source code: https://github.com/SVRTK/auto-proc-svrtk"
 echo
+echo "Please cite: Uus, A. U., Kyriakopoulou, V., Makropoulos, A., Fukami-Gartner, A.,"
+echo "Cromb, D., Davidson, A., Cordero-Grande, L., Price, A. N., Grigorescu, I., "
+echo "Williams, L. Z. J., Robinson, E. C., Lloyd, D., Pushparajah, K., Story, L., "
+echo "Hutter, J., Counsell, S. J., Edwards, A. D., Rutherford, M. A., Hajnal, J. V., "
+echo "Deprez, M. (2023) BOUNTI: Brain vOlumetry and aUtomated parcellatioN for 3D feTal MRI. "
+echo "eLife 12:RP88818; doi: https://doi.org/10.7554/eLife.88818.1"
+echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo

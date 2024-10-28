@@ -89,6 +89,13 @@ echo
 echo "SVRTK for fetal MRI (KCL): auto body organ segmentation for 3D DSVR SSTSE / HASTE T2w fetal MRI"
 echo "Source code: https://github.com/SVRTK/auto-proc-svrtk"
 echo
+echo "Please cite: Uus, A. U., Hall, M., Grigorescu, I., Avena Zampieri, C., "
+echo "Egloff Collado, A., Payette, K., Matthew, J., Kyriakopoulou, V., Hajnal, J. V., "
+echo "Hutter, J., Rutherford, M. A., Deprez, M., Story, L. (2024) "
+echo "Automated body organ segmentation, volumetry and population-averaged atlas "
+echo "for 3D motion-corrected T2-weighted fetal body MRI. Sci Rep 14, 6637;"
+echo "doi: https://doi.org/10.1038/s41598-024-57087-x"
+echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo
