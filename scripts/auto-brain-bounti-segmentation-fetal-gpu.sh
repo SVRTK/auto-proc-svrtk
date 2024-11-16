@@ -130,6 +130,7 @@ fi
 test_dir=${output_main_folder}
 if [[ ! -d ${test_dir} ]];then
 	mkdir ${output_main_folder}
+    chmod 1777 -R ${output_main_folder}
 fi 
 
 
@@ -393,6 +394,7 @@ else
 
 fi
 
+chmod 1777 -R ${output_main_folder}
 
 echo
 echo "-----------------------------------------------------------------------------"

@@ -90,6 +90,12 @@ echo
 echo "SVRTK for fetal MRI (KCL): auto lung segmentation for 3D DSVR SSTSE / HASTE T2w fetal MRI"
 echo "Source code: https://github.com/SVRTK/auto-proc-svrtk"
 echo
+echo "Towards automated multi-regional lung parcellation for 0.55-3T 3D T2w fetal MRI"
+echo "Uus, A., Avena Zampieri, C., Downes, F., Egloff Collado, A., Hall, M., Davidson, "
+echo "J. R., Payette, K., Aviles Verdera, J., Grigorescu, I., Hajnal, J., Deprez, M., "
+echo "Aertsen, M., Hutter, J., Rutherford, M., Deprest, J. & Story, L., Jul 2024, "
+echo "PIPPI MICCAI Workshop 2024. LNCS, vol 14747. https://doi.org/10.1007/978-3-031-73260-7_11"
+echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo
@@ -123,6 +129,7 @@ fi
 test_dir=${output_main_folder}
 if [[ ! -d ${test_dir} ]];then
 	mkdir ${output_main_folder}
+    chmod 1777 -R ${output_main_folder}
 fi 
 
 
@@ -327,6 +334,9 @@ if [[ ${number_of_final_files} -ne 0 ]];then
     echo "-----------------------------------------------------------------------------"
         
 else
+
+    chmod 1777 -R ${output_main_folder}
+    
     echo
     echo "-----------------------------------------------------------------------------"
     echo "ERROR: COULD NOT COPY THE FILES TO THE OUTPUT FOLDER : " ${output_main_folder}

@@ -129,6 +129,7 @@ fi
 test_dir=${output_main_folder}
 if [[ ! -d ${test_dir} ]];then
 	mkdir ${output_main_folder}
+    chmod 1777 -R ${output_main_folder}
 fi 
 
 
@@ -367,6 +368,7 @@ if [[ ${number_of_final_files} -ne 0 ]];then
     echo "-----------------------------------------------------------------------------"
         
 else
+    chmod 1777 -R ${output_main_folder}
     echo
     echo "-----------------------------------------------------------------------------"
     echo "ERROR: COULD NOT COPY THE FILES TO THE OUTPUT FOLDER : " ${output_main_folder}

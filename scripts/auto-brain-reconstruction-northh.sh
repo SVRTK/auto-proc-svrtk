@@ -867,6 +867,7 @@ if [ $recon_roi = "brain" ]; then
     ${mirtk_path}/mirtk threshold-image reo-SVR-output-${recon_roi}.nii.gz tmp-m.nii.gz 0.01 > tmp.txt
     ${mirtk_path}/mirtk crop-image reo-SVR-output-${recon_roi}.nii.gz tmp-m.nii.gz reo-SVR-output-${recon_roi}.nii.gz
     ${mirtk_path}/mirtk nan reo-SVR-output-${recon_roi}.nii.gz 100000
+    ${mirtk_path}/mirtk convert-image reo-SVR-output-${recon_roi}.nii.gz reo-SVR-output-${recon_roi}.nii.gz -rescale 0 5000 -short
 
 
     test_file=reo-SVR-output-${recon_roi}.nii.gz

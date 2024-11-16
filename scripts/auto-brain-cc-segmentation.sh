@@ -59,11 +59,7 @@ fi
 
 #fetal
 monai_check_path_bet_attunet=${segm_path}/trained_models/monai-checkpoints-attunet-brain-bet-1-lab
-monai_check_path_bounti_unet=${segm_path}/trained_models/monai-checkpoints-unet-early_brain-bounti-19-lab
-monai_check_path_bounti_attunet=${segm_path}/trained_models/monai-checkpoints-red-attunet-early_brain_bounti-19-lab
-
-
-
+# monai_check_path_cc_unet=${segm_path}/trained_models/monai-checkpoints-unet-brain-cc-2-lab
 
 ##neo
 #monai_check_path_bet_neo_attunet=${segm_path}/trained_models/monai-checkpoints-attunet-neo-brain-bet-1-lab
@@ -90,7 +86,7 @@ echo
 echo "-----------------------------------------------------------------------------"
 echo "-----------------------------------------------------------------------------"
 echo
-echo "SVRTK for fetal MRI (KCL): auto brain tissue segmentation for 3D SVR SSTSE / HASTE T2w fetal MRI"
+echo "SVRTK for fetal MRI (KCL): auto brain CC segmentation for 3D SVR SSTSE / HASTE T2w fetal MRI"
 echo "Source code: https://github.com/SVRTK/auto-proc-svrtk"
 echo
 echo "Please cite: Uus, A. U., Kyriakopoulou, V., Makropoulos, A., Fukami-Gartner, A.,"
@@ -105,7 +101,7 @@ echo "--------------------------------------------------------------------------
 echo
 
 if [[ $# -ne 2 ]] ; then
-    echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-brain-bounti-segmentation-fetal.sh"
+    echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-brain-cc-segmentation.sh"
     echo "            [full path to the folder with 3D T2w SVR recons]"
     echo "            [full path to the folder for segmentation results]"
     echo
@@ -305,18 +301,21 @@ stack_names=$(ls masked-stacks/*.nii*)
 
 echo " ... "
 
-res=256
-monai_lab_num=19
+res=128
+monai_lab_num=2
 number_of_stacks=$(find masked-stacks/ -name "*.nii*" | wc -l)
 ${mirtk_path}/mirtk prepare-for-monai res-masked-stack-files/ masked-stack-files/ masked-stack-info.json masked-stack-info.csv ${res} ${number_of_stacks} masked-stacks/*nii* > tmp.log
 
-mkdir monai-segmentation-results-bounti
+mkdir monai-segmentation-results-cc
 
-python3 ${segm_path}/src/run_monai_comb_red_atunet_unet_segmentation-2022-lr.py ${main_dir}/ ${monai_check_path_bounti_attunet}/ ${monai_check_path_bounti_unet}/ masked-stack-info.json ${main_dir}/monai-segmentation-results-bounti ${res} ${monai_lab_num}
+current_monai_check_path=${segm_path}/trained_models/monai-checkpoints-unet-brain-cc-128-2-lab
+
+python3 ${segm_path}/src/run_monai_unet_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ masked-stack-info.json ${main_dir}/monai-segmentation-results-cc ${res} ${monai_lab_num}
 
 
 
-number_of_stacks=$(find monai-segmentation-results-bounti/ -name "*.nii*" | wc -l)
+
+number_of_stacks=$(find monai-segmentation-results-cc/ -name "*.nii*" | wc -l)
 if [[ ${number_of_stacks} -eq 0 ]];then
     echo
     echo "-----------------------------------------------------------------------------"
@@ -334,7 +333,7 @@ echo "EXTRACTING LABELS AND TRANSFORMING TO THE ORIGINAL SPACE ..."
 echo "-----------------------------------------------------------------------------"
 echo
 
-out_mask_names=$(ls monai-segmentation-results-bounti/cnn-*.nii*)
+out_mask_names=$(ls monai-segmentation-results-cc/cnn-*.nii*)
 IFS=$'\n' read -rd '' -a all_masks <<<"$out_mask_names"
 
 stack_names=$(ls org-files/*.nii*)
@@ -352,10 +351,10 @@ do
     echo
     
     ${mirtk_path}/mirtk transform-image ${all_masks[$i]} ${all_masks[$i]} -target ${all_stacks[$i]} -labels
-    ${mirtk_path}/mirtk transform-and-rename ${all_stacks[$i]} ${all_masks[$i]} "-mask-brain_bounti-"${monai_lab_num} ${main_dir}/bounti-masks
+    ${mirtk_path}/mirtk transform-and-rename ${all_stacks[$i]} ${all_masks[$i]} "-mask-brain_cc-"${monai_lab_num} ${main_dir}/bounti-masks
     
-    ${mirtk_path}/mirtk transform-image bet-masks/mask-${jj}.nii.gz bet-masks/mask-${jj}.nii.gz  -target ${all_stacks[$i]} -labels
-    ${mirtk_path}/mirtk transform-and-rename ${all_stacks[$i]} bet-masks/mask-${jj}.nii.gz "-mask-bet-1" ${main_dir}/bounti-masks
+    # ${mirtk_path}/mirtk transform-image bet-masks/mask-${jj}.nii.gz bet-masks/mask-${jj}.nii.gz  -target ${all_stacks[$i]} -labels
+    # ${mirtk_path}/mirtk transform-and-rename ${all_stacks[$i]} bet-masks/mask-${jj}.nii.gz "-mask-bet-1" ${main_dir}/bounti-masks
     
     echo
 
@@ -386,6 +385,7 @@ else
 fi
 
 chmod 1777 -R ${output_main_folder}
+
 
 echo
 echo "-----------------------------------------------------------------------------"
