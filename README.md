@@ -77,19 +77,18 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 **AUTOMATED 3D T2w BRAIN / BODY / ... SEGMENTATION:**
 
 
+<img src="info/svrtk-labels.jpg" alt="AUTOSVRTKEXAMPLE" height="200" align ="center" />
+
 *Input data requirements:*
 - sufficient SNR and image quality
 - full ROI coverage
 - good quality 3D SVR / DSVR reconsruction
 - reorientation to the standard radiological atlas space
-- 21-38 weeks GA
+- 20-38 weeks GA
 - no extreme shading artifacts
 - no extreme structural anomalies
 - 0.55 / 1.5 / 3T
 - 80 – 250ms TE
-
-
-<img src="info/svrtk-labels.jpg" alt="AUTOSVRTKEXAMPLE" height="300" align ="center" />
 
 
 ```bash
