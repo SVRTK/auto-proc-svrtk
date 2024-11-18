@@ -89,6 +89,9 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 - 80 – 250ms TE
 
 
+<img src="info/svrtk-labels.jpg" alt="AUTOSVRTKEXAMPLE" height="300" align ="center" />
+
+
 ```bash
 
 docker pull fetalsvrtk/svrtk:general_auto_amd
