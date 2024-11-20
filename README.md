@@ -110,7 +110,7 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 #auto body organ segmentation
 docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-body-organ-segmentation.sh /home/data/your_folder_with_body_dsvr_t2_files  /home/data/output_folder_for_segmentations ; '
 
-#auto lung segmentation
+#auto lung segmentation (normal and CDH)
 docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-lung-segmentation.sh /home/data/your_folder_with_body_dsvr_t2_files  /home/data/output_folder_for_segmentations ; ' 
 
 #auto face/head segmentation
@@ -182,6 +182,9 @@ In case you found auto SVRTK useful please give appropriate credit to the softwa
 
 **Body organ segmentation:**
 > Uus, A. U., Hall, M., Grigorescu, I., Avena Zampieri, C., Egloff Collado, A., Payette, K., Matthew, J., Kyriakopoulou, V., Hajnal, J. V., Hutter, J., Rutherford, M. A., Deprez, M., Story, L. (2024) Automated body organ segmentation, volumetry and population-averaged atlas for 3D motion-corrected T2-weighted fetal body MRI. Sci Rep 14, 6637; doi: https://doi.org/10.1038/s41598-024-57087-x
+
+**Lung segmentation:**
+> Uus, A., Avena Zampieri, C., Downes, F., Egloff Collado, A., Hall, M., Davidson, J. R., Payette, K., Aviles Verdera, J., Grigorescu, I., Hajnal, J., Deprez, M., Aertsen, M., Hutter, J., Rutherford, M., Deprest, J. & Story, L., (2024). Towards automated multi-regional lung parcellation for 0.55-3T 3D T2w fetal MRI. PIPPI MICCAI Workshop 2024. LNCS vol 14747. https://doi.org/10.1007/978-3-031-73260-7_11
 
 **Face segmentation:**
 > Matthew, J., Uus, A., de Souza, L., Wright, R., Fukami-Gartner, A., Priego, G., Saija, C., Deprez, M., Collado, A. E., Hutter, J., Story, L., Malamateniou, C., Rhode, K., Hajnal, J., & Rutherford, M. A. (2024). Craniofacial phenotyping with fetal MRI: a feasibility study of 3D visualisation, segmentation, surface-rendered and physical models. BMC Medical Imaging, 24(1), 52. https://doi.org/10.1186/s12880-024-01230-7
