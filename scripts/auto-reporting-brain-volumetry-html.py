@@ -302,7 +302,7 @@ html_content = f"""
             <img src="data:image/png;base64,{brain_image_b64}" alt="3D segmentation volumes" class="brain-image">
 
             <table class="info-table" border="1">
-                <tr><th>Measurement</th><th>Distance [mm]</th><th>Percentile</th><th>Z-score</th></tr>
+                <tr><th>Measurement</th><th>Volume [cc]</th><th>Percentile</th><th>Z-score</th></tr>
                 {measurements_table}
             </table>
         </div>
