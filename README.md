@@ -157,6 +157,7 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 - corresponding segmentations (after QC)
 - case GA
 
+<img src="info/html-report.jpg" alt="AUTOSVRTKEXAMPLE" height="180" align ="center" />
 
 ```bash
 
