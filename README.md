@@ -149,6 +149,28 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 ```
 
 
+**AUTOMATED VOLUMETRY REPORTING FOR 3D T2w BRAIN / LUNGS / ... SEGMENTATIONS:**
+
+
+*Input data requirements:*
+- reconstructed 3D body / brain images (after QC)
+- corresponding segmentations (after QC)
+- case GA
+
+
+```bash
+
+docker pull fetalsvrtk/svrtk:general_auto_amd
+
+#brain tissue volumetry reporting 
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' python3 /home/auto-proc-svrtk/scripts/auto-reporting-brain-volumetry-html.py CASE_ID 28.14 DATE /home/data/vol-test/brain-svr-file.nii.gz /home/data/brain-tissue-segmenation-file.nii.gz /home/data/name-for-volumetry-report.html ; chmod 777 /home/data/name-for-volumetry-report.html  '
+
+#lung volumetry reporting 
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' python3 /home/auto-proc-svrtk/scripts/auto-reporting-brain-volumetry-html.py CASE_ID 28.14 DATE /home/data/vol-test/body-svr-file.nii.gz /home/data/lung-lobe-segmenation-file.nii.gz /home/data/name-for-volumetry-report.html ; chmod 777 /home/data/name-for-volumetry-report.html  '
+
+
+```
+
 
 License
 -------
