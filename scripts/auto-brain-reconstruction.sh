@@ -408,11 +408,21 @@ do
     roi=brain
 #    ${mirtk_path}/mirtk erode-image out-global-masks/mask-${roi}-${jj}.nii.gz out-global-masks/mask-${roi}-${jj}.nii.gz -iterations 2
 #    ${mirtk_path}/mirtk dilate-image out-global-masks/mask-brain-${jj}.nii.gz out-global-masks/mask-${roi}-${jj}.nii.gz -iterations 2
-    ${mirtk_path}/mirtk dilate-image out-global-masks/mask-${roi}-${jj}.nii.gz dl-m.nii.gz -iterations 3
+    ${mirtk_path}/mirtk dilate-image out-global-masks/mask-${roi}-${jj}.nii.gz dl-m.nii.gz -iterations 4 
     ${mirtk_path}/mirtk crop-image ${all_org_stacks[$i]} dl-m.nii.gz cropped-stacks-${roi}/stack-${jj}.nii.gz
     cp cropped-stacks-${roi}/stack-${jj}.nii.gz recon-stacks-${roi}/
-#    ${mirtk_path}/mirtk mask-image cropped-stacks-${roi}/stack-${jj}.nii.gz dl-m.nii.gz masked-cropped-stacks-${roi}/stack-${jj}.nii.gz
-    cp cropped-stacks-${roi}/stack-${jj}.nii.gz masked-cropped-stacks-${roi}/stack-${jj}.nii.gz
+
+    # ${mirtk_path}/mirtk dilate-image out-global-masks/mask-${roi}-${jj}.nii.gz dl-m.nii.gz -iterations 5
+    # ${mirtk_path}/mirtk crop-image ${all_org_stacks[$i]} dl-m.nii.gz cropped-stacks-${roi}/stack-${jj}.nii.gz
+
+    ${mirtk_path}/mirtk mask-image cropped-stacks-${roi}/stack-${jj}.nii.gz dl-m.nii.gz masked-cropped-stacks-${roi}/stack-${jj}.nii.gz
+
+    # cp cropped-stacks-${roi}/stack-${jj}.nii.gz masked-cropped-stacks-${roi}/stack-${jj}.nii.gz
+
+    # /home/auto-proc-svrtk/bin/N4BiasFieldCorrection -i masked-cropped-stacks-${roi}/stack-${jj}.nii.gz -o q.nii.gz > tmp.txt 
+
+    # cp q.nii.gz masked-cropped-stacks-${roi}/stack-${jj}.nii.gz
+
     ${mirtk_path}/mirtk resample-image masked-cropped-stacks-${roi}/stack-${jj}.nii.gz masked-cropped-stacks-${roi}/stack-${jj}.nii.gz -size 1.5 1.5 1.5
 
 
@@ -448,6 +458,13 @@ monai_lab_num=1
 ${mirtk_path}/mirtk prepare-for-monai res-cropped-files/ again-cropped-files/ cropped-stack-info.json cropped-stack-info.csv ${res} ${number_of_stacks} masked-cropped-stacks-${roi}/*nii* > tmp.log
     
 current_monai_check_path=${model_path}/monai-checkpoints-atunet-brain_bet_all_degree_raw_stacks-1-lab
+
+# current_monai_check_path=${model_path}/monai-checkpoints-atunet-brain_bet_general-1-lab
+
+# current_monai_check_path=${model_path}/monai-checkpoints-attunet-brain-bet-1-lab
+
+ 
+# echo $current_monai_check_path
 
 mkdir monai-segmentation-results-stack-brain
 python3 ${segm_path}/src/run_monai_atunet_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ cropped-stack-info.json ${main_dir}/monai-segmentation-results-stack-brain ${res} ${monai_lab_num}
@@ -499,12 +516,20 @@ do
     ${mirtk_path}/mirtk centre-volume recon-masks-brain/mask-${jj}.nii.gz recon-masks-brain/mask-${jj}.nii.gz recon-masks-brain/mask-${jj}.nii.gz
     
     if [ $motion_correction_mode -eq 1 ]; then
+
+        # ${mirtk_path}/mirtk resample-image recon-masks-brain/mask-${jj}.nii.gz dl.nii.gz -size 1.5 1.5 1.5 
     
-        ${mirtk_path}/mirtk dilate-image recon-masks-brain/mask-${jj}.nii.gz dl.nii.gz -iterations 4
+        ${mirtk_path}/mirtk dilate-image recon-masks-brain/mask-${jj}.nii.gz dl.nii.gz -iterations 3
+
+        # ${mirtk_path}/mirtk dilate-image out-global-masks/mask-brain-${jj}.nii.gz dl.nii.gz -iterations 3 
         
         ${mirtk_path}/mirtk crop-image recon-stacks-brain/stack-${jj}.nii.gz  dl.nii.gz masked-cropped-files-brain/stack-${jj}.nii.gz
         ${mirtk_path}/mirtk mask-image masked-cropped-files-brain/stack-${jj}.nii.gz  dl.nii.gz masked-cropped-files-brain/stack-${jj}.nii.gz
         
+        # /home/auto-proc-svrtk/bin/N4BiasFieldCorrection -i masked-cropped-files-brain/stack-${jj}.nii.gz -o q.nii.gz > tmp.txt 
+
+        # cp q.nii.gz masked-cropped-files-brain/stack-${jj}.nii.gz
+
         ${mirtk_path}/mirtk resample-image masked-cropped-files-brain/stack-${jj}.nii.gz masked-cropped-files-brain/stack-${jj}.nii.gz -size 1 1 1 -interp Linear
     fi
 done
@@ -523,10 +548,12 @@ if [ $motion_correction_mode -eq 1 ]; then
     
     echo " ... "
     
+    mkdir res-masked-cropped-files
+
     roi=brain
     res=128
     monai_lab_num=5
-    ${mirtk_path}/mirtk prepare-for-monai res-cropped-files/ again-cropped-files/ reo-cropped-stack-info.json reo-cropped-stack-info.csv ${res} ${number_of_stacks} masked-cropped-files-brain/*nii* > tmp.log
+    ${mirtk_path}/mirtk prepare-for-monai res-masked-cropped-files/ again-cropped-files/ reo-cropped-stack-info.json reo-cropped-stack-info.csv ${res} ${number_of_stacks} masked-cropped-files-brain/*nii* > tmp.log
     
     current_monai_check_path=${model_path}/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab
 
@@ -658,6 +685,7 @@ if [ $recon_roi = "brain" ]; then
         
     ${mirtk_path}/mirtk stacks-and-masks-selection ${number_of_stacks} $(echo $stack_names) $(echo $mask_names) proc-stacks-${recon_roi} 15 1
     
+    cp selected_template.nii.gz stack-selected_template.nii.gz
     
     test_file=selected_template.nii.gz
     if [ ! -f ${test_file} ];then
@@ -698,6 +726,8 @@ if [ $recon_roi = "brain" ]; then
         ${mirtk_path}/mirtk average-images average_mask_cnn.nii.gz recon-masks-${recon_roi}/*.nii* -target selected_template.nii.gz
         ${mirtk_path}/mirtk nan selected_template.nii.gz 1000000
         ${mirtk_path}/mirtk convert-image average_mask_cnn.nii.gz average_mask_cnn.nii.gz -short
+
+        cp selected_template.nii.gz stack-selected_template.nii.gz 
     
     else
 
@@ -729,20 +759,42 @@ if [ $recon_roi = "brain" ]; then
     
     echo " ... "
 
+    ${mirtk_path}/mirtk threshold-image transf-selected_template.nii.gz m.nii.gz  0.5 > tmp.txt 
+    ${mirtk_path}/mirtk erode-image m.nii.gz m.nii.gz
+    ${mirtk_path}/mirtk extract-connected-components m.nii.gz m.nii.gz
+
+    ${mirtk_path}/mirtk crop-image transf-selected_template.nii.gz m.nii.gz transf-selected_template.nii.gz
+
+    
+    # /home/auto-proc-svrtk/bin/N4BiasFieldCorrection -i stack-selected_template.nii.gz -o q.nii.gz > tmp.txt 
+
+    # cp q.nii.gz stack-selected_template.nii.gz
+
     
     # ${mirtk_path}/mirtk mask-image SVR-output-${recon_roi}.nii.gz average_mask_cnn.nii.gz   masked-SVR-output-${recon_roi}.nii.gz
     
-    ${mirtk_path}/mirtk prepare-for-monai res-template-files/ template-files/ reo-template-info.json reo-svr-info.csv ${res} 1 transf-selected_template.nii.gz > tmp.log
+    # cp stack-selected_template.nii.gz  
+ 
+    ${mirtk_path}/mirtk prepare-for-monai res-template-files/ template-files/ reo-template-info.json reo-svr-info.csv ${res} 1 stack-selected_template.nii.gz  > tmp.log
 
-    current_monai_check_path=${model_path}/monai-checkpoints-attunet-brain-bet-1-lab
+
+    # ${mirtk_path}/mirtk prepare-for-monai res-template-files/ template-files/ reo-template-info.json reo-svr-info.csv ${res} 1 transf-selected_template.nii.gz > tmp.log
+
+    # current_monai_check_path=${model_path}/monai-checkpoints-attunet-brain-bet-1-lab
+
+    # current_monai_check_path=${model_path}/monai-checkpoints-atunet-brain_bet_general-1-lab
+
+    current_monai_check_path=${model_path}/monai-checkpoints-atunet-brain_bet_all_degree_raw_stacks-1-lab
     
-    mkdir monai-segmentation-results-template-bet
+    mkdir monai-segmentation-results-template-bet 
     python3 ${segm_path}/src/run_monai_atunet_segmentation-2022.py ${main_dir}/ ${current_monai_check_path}/ reo-template-info.json ${main_dir}/monai-segmentation-results-template-bet ${res} ${monai_lab_num}
 
-    ${mirtk_path}/mirtk extract-connected-components monai-segmentation-results-template-bet/cnn-*  average_mask_cnn.nii.gz 
+    ${mirtk_path}/mirtk erode-image monai-segmentation-results-template-bet/cnn-* average_mask_cnn.nii.gz -iterations 3
+
+    ${mirtk_path}/mirtk extract-connected-components average_mask_cnn.nii.gz   average_mask_cnn.nii.gz 
     
-    ${mirtk_path}/mirtk dilate-image average_mask_cnn.nii.gz average_mask_cnn.nii.gz -iterations 2
-    ${mirtk_path}/mirtk erode-image average_mask_cnn.nii.gz average_mask_cnn.nii.gz -iterations 2
+    ${mirtk_path}/mirtk dilate-image average_mask_cnn.nii.gz average_mask_cnn.nii.gz -iterations 4
+    
 
     # cp ${main_dir}/monai-segmentation-results-template-bet/cnn* 
 
@@ -788,10 +840,12 @@ if [ $recon_roi = "brain" ]; then
     
     
     ${mirtk_path}/mirtk dilate-image ../average_mask_cnn.nii.gz dl.nii.gz -iterations 6
-    ${mirtk_path}/mirtk mask-image ../SVR-output-${recon_roi}.nii.gz dl.nii.gz ../SVR-output-${recon_roi}.nii.gz
+    # ${mirtk_path}/mirtk mask-image ../SVR-output-${recon_roi}.nii.gz dl.nii.gz ../SVR-output-${recon_roi}.nii.gz
     
     ${mirtk_path}/mirtk dilate-image ../average_mask_cnn.nii.gz dl.nii.gz -iterations 2
     ${mirtk_path}/mirtk mask-image ../SVR-output-${recon_roi}.nii.gz dl.nii.gz  ../masked-SVR-output-${recon_roi}.nii.gz
+    ${mirtk_path}/mirtk crop-image ../masked-SVR-output-${recon_roi}.nii.gz dl.nii.gz  ../masked-SVR-output-${recon_roi}.nii.gz
+
     
     
     echo
