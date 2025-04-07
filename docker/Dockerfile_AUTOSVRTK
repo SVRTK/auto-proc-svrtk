@@ -51,15 +51,18 @@ RUN apt-get install -y \
 	libboost-all-dev \
 	libeigen3-dev \
 	libtbb-dev \
-	libfltk1.3-dev
+	libfltk1.3-dev \
+	libinsighttoolkit4-dev
 
 
 RUN git clone https://github.com/SVRTK/MIRTK.git \
-    && mkdir -p /bin/MIRTK/Packages/SVRTK
-RUN git clone https://github.com/SVRTK/SVRTK.git /bin/MIRTK/Packages/SVRTK \
-    && mkdir -p /bin/MIRTK/build \
+	&& mkdir -p /bin/MIRTK/Packages/SVRTK \ 
+	&& git clone https://github.com/SVRTK/SVRTK.git /bin/MIRTK/Packages/SVRTK \
+	&& mkdir -p /bin/MIRTK/Packages/DrawEM \ 
+	&& git clone https://github.com/MIRTK/DrawEM.git /bin/MIRTK/Packages/DrawEM \
+	&& mkdir -p /bin/MIRTK/build \
 	&& cd /bin/MIRTK/build \
-	&& cmake -D WITH_TBB="ON" -D MODULE_SVRTK="ON" .. \
+	&& cmake -D WITH_TBB="ON" -D MODULE_SVRTK="ON" -D MODULE_DrawEM="ON" -D WITH_ITK="ON" .. \
 	&& make -j
 
 ENV PATH="$PATH:/bin/MIRTK/build/bin:/bin/MIRTK/build/lib/tools"
@@ -72,13 +75,31 @@ RUN git clone https://github.com/SVRTK/auto-proc-svrtk.git /home/auto-proc-svrtk
 RUN apt-get install --no-install-recommends --no-install-suggests -y ca-certificates python3-pip
 
 RUN wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-atunet-brain_bet_all_degree_raw_stacks-1-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-atunet-brain_bet_all_degree_raw_stacks-1-lab \
-    && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-global-loc-2-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-global-loc-2-lab \
-    && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-svr-brain-reo-5-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-svr-brain-reo-5-lab \
-    && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab \
-    && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-stack-body-reo-4-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-stack-body-reo-4-lab \
-    && wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-thorax-reo-4-lab-cmr/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-thorax-reo-4-lab-cmr 
-
-
+	&& wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-global-loc-2-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-global-loc-2-lab \
+	&& wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-svr-brain-reo-5-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-svr-brain-reo-5-lab \
+	&& wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-svr-brain-reo-raw-stacks-5-lab \
+	&& wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-stack-body-reo-4-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-stack-body-reo-4-lab \
+	&& wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/master/monai-checkpoints-unet-thorax-reo-4-lab-cmr/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-thorax-reo-4-lab-cmr \
+	&& wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/add-monai-checkpoints-attunet-brain-bet-1-lab/monai-checkpoints-attunet-brain-bet-1-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-attunet-brain-bet-1-lab \
+	&& wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/add-monai-checkpoints-unet-brain-bounti-19-lab/monai-checkpoints-unet-brain-bounti-19-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-unet-brain-bounti-19-lab \
+	&& wget https://gin.g-node.org/SVRTK/fetal_mri_network_weights/raw/add-monai-checkpoints-red-attunet-brain_bounti-19-lab/monai-checkpoints-red-attunet-brain_bounti-19-lab/best_metric_model.pth -P /home/auto-proc-svrtk/trained_models/monai-checkpoints-red-attunet-brain_bounti-19-lab
+	# TODO: Get all network weights from master branch once add-on branches are merged and other missing weights are added to repo.
+	# NOTE: Additional network weights may be needed for some scripts in auto-proc-svrtk that aren't available in the fetal_mri_network_weights repo. 
+	# For example, the following are used in auto-brain-bounti-segmentation-fetal, auto-brain-bet-segmentation-fetal, auto-brain-reorientation, 
+	# auto-thorax-reconstruction, auto-thorax-reorientation, auto-lung-segmentation, and/or auto-body-organ-segmentation, and aren't in the fetal_mri_network_weights repo.
+	# An alternative approach is to copy them from local files during build. E.g., (done here in a bit of a roundabout way so that it works when dockerfile is converted to singularity definition).
+	# 	COPY monai-checkpoints-unet-body_global-1-lab /home/external_files/trained_models/
+	# 	COPY monai-checkpoints-unet-body_organ-10-lab /home/external_files/trained_models/
+	# 	COPY monai-checkpoints-unet-thorax-1-lab /home/external_files/trained_models/
+	# 	COPY monai-checkpoints-unet-body-lung-multi-256-10-lab /home/external_files/trained_models/
+	# 	COPY reo-spine-body-atlas /home/external_files/templates/
+	# 	RUN mv /home/external_files/trained_models/* /home/auto-proc-svrtk/trained_models/ \
+	# 		&& mv /home/external_files/templates/* /home/auto-proc-svrtk/templates/ \
+	# 		&& rm -r /home/external_files \
+	# 		&& chmod 775 /home/auto-proc-svrtk/trained_models/* \
+	# 		&& chmod 664 /home/auto-proc-svrtk/trained_models/*/* \
+	# 		&& chmod 775 /home/auto-proc-svrtk/templates/* \
+	# 		&& chmod 664 /home/auto-proc-svrtk/templates/*/*
 
 RUN apt install python3-pip
 RUN pip3 list
