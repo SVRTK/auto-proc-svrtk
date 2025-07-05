@@ -5,7 +5,7 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 
 
 
-- The repository and code for automation of [SVR](https://github.com/SVRTK/SVRTK) reconstruction and deep learning segmentation were designed and created by [Alena Uus](https://github.com/alenauus), KCL.
+- The repository and code for automation of [SVR](https://github.com/SVRTK/SVRTK) reconstruction and deep learning segmentation were designed and created by [Alena Uus](https://github.com/alenauus), Kings' College London.
 
 
 
