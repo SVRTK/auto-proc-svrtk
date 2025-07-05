@@ -58,7 +58,8 @@ if [[ ! -d ${test_dir} ]];then
 fi
 
 #fetal
-monai_check_path_bet_attunet=${segm_path}/trained_models/monai-checkpoints-attunet-brain-bet-1-lab
+#monai_check_path_bet_attunet=${segm_path}/trained_models/monai-checkpoints-attunet-brain-bet-1-lab
+monai_check_path_bet_attunet=${segm_path}/trained_models/monai-checkpoints-atunet-brain_bet_general-1-lab
 # monai_check_path_cc_unet=${segm_path}/trained_models/monai-checkpoints-unet-brain-cc-2-lab
 
 ##neo

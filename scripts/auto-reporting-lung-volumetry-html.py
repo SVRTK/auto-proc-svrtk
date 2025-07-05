@@ -55,6 +55,9 @@ def plot_body_image(t2w_data, mask_data):
     coronal_lab_slice5 = mask_data[:, round(y*0.6), :]
 
 
+    min_label=1
+    max_label=5
+
     i = 0
     axs[i].imshow(coronal_t2w_slice1.T, cmap='gray', origin='lower')
     # axs[i].imshow(coronal_lab_slice1.T, cmap='jet', origin='lower', alpha=a)
@@ -82,27 +85,27 @@ def plot_body_image(t2w_data, mask_data):
 
     i = 5
     axs[i].imshow(coronal_t2w_slice1.T, cmap='gray', origin='lower')
-    axs[i].imshow(coronal_lab_slice1.T, cmap='jet', origin='lower', alpha=a)
+    axs[i].imshow(coronal_lab_slice1.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
     i = 6
     axs[i].imshow(coronal_t2w_slice2.T, cmap='gray', origin='lower')
-    axs[i].imshow(coronal_lab_slice2.T, cmap='jet', origin='lower', alpha=a)
+    axs[i].imshow(coronal_lab_slice2.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
     i = 7
     axs[i].imshow(coronal_t2w_slice3.T, cmap='gray', origin='lower')
-    axs[i].imshow(coronal_lab_slice3.T, cmap='jet', origin='lower', alpha=a)
+    axs[i].imshow(coronal_lab_slice3.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
     i = 8
     axs[i].imshow(coronal_t2w_slice4.T, cmap='gray', origin='lower')
-    axs[i].imshow(coronal_lab_slice4.T, cmap='jet', origin='lower', alpha=a)
+    axs[i].imshow(coronal_lab_slice4.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
     i = 9
     axs[i].imshow(coronal_t2w_slice5.T, cmap='gray', origin='lower')
-    axs[i].imshow(coronal_lab_slice5.T, cmap='jet', origin='lower', alpha=a)
+    axs[i].imshow(coronal_lab_slice5.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
 
@@ -178,10 +181,11 @@ def generate_table_measurements(input_lab_matrix, voxel_dims, ga):
     for name, (label1, label2, label3, label4, label5, a, b, a5, b5, title) in measurements.items():
         volume_cc = compute_volume(input_lab_matrix, label1, label2, label3, label4, label5, voxel_dims)
         mean = a * (ga ** b)
+        oe_val = volume_cc / mean
         std_dev = a5 * (ga ** b5)
         z_score = (volume_cc - mean) / std_dev
         percentile = norm.cdf(z_score) * 100
-        results.append((name, volume_cc, percentile, z_score))
+        results.append((name, volume_cc, oe_val, percentile, z_score))
     return results
 
 
@@ -221,8 +225,8 @@ plot_measurements_results = generate_all_measurements(input_lab_matrix, voxel_di
 table_measurements_results = generate_table_measurements(input_lab_matrix, voxel_dims, input_ga)
 body_image_b64 = plot_body_image(input_img_matrix, input_lab_matrix)
 
-measurements_table = "".join([f"<tr><td>{name}</td><td>{volume_cc:.2f}</td><td>{percentile:.2f}</td><td>{z_score:.2f}</td></tr>"
-                              for name, volume_cc, percentile, z_score in table_measurements_results])
+measurements_table = "".join([f"<tr><td>{name}</td><td>{volume_cc:.2f}</td><td>{oe_val:.2f}</td><td>{percentile:.2f}</td><td>{z_score:.2f}</td></tr>"
+                              for name, volume_cc, oe_val, percentile, z_score in table_measurements_results])
 
 
 print()
@@ -291,7 +295,7 @@ html_content = f"""
             <img src="data:image/png;base64,{body_image_b64}" alt="3D segmentation volumes" class="body-image">
 
             <table class="info-table" border="1">
-                <tr><th>Measurement</th><th>Volume [cc]</th><th>Percentile</th><th>Z-score</th></tr>
+                <tr><th>Measurement</th><th>Volume [cc]</th><th>O/E</th><th>Percentile</th><th>Z-score</th></tr>
                 {measurements_table}
             </table>
         </div>

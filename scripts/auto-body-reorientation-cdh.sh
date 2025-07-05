@@ -313,7 +313,7 @@ do
 
 
     if [[ ${out_scale} -eq 1 ]];then
-        ${mirtk_path}/mirtk convert-image ${all_stacks[$i]} ${all_stacks[$i]} -rescale 0 1000
+        ${mirtk_path}/mirtk convert-image ${all_stacks[$i]} ${all_stacks[$i]} -rescale 0 5000
     fi 
     
     if [[ ${out_type} -eq 1 ]];then

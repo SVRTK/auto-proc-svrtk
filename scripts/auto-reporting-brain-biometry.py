@@ -199,16 +199,16 @@ def generate_all_measurements(input_lab_matrix, voxel_dims, ga):
         "Skull BPD": (1, 2, -0.0527, 5.7605, -46.436, 0.0895, 0.1414, "Skull BPD"),
         "Skull OFD": (5, 6, -0.0984, 8.8526, -81.605, 0.1511, -1.3192, "Skull OFD"),
         "Maximal brain width": (3, 4, 0.016, 1.763, -0.9597, 0.1308, -1.32, "Maximal brain width"),
-        "Brain OFD Right": (7, 8, -0.0781, 7.7234, -75.3, 0.1277, -0.9298, "Brain OFD Right"),
-        "Brain OFD Left": (32, 33, -0.0781, 7.7234, -75.3, 0.1277, -0.9298, "Brain OFD Left"),
+        "Brain OFD Right": (32, 33, -0.0781, 7.7234, -75.3, 0.1277, -0.9298, "Brain OFD Right"),
+        "Brain OFD Left": (7, 8, -0.0781, 7.7234, -75.3, 0.1277, -0.9298, "Brain OFD Left"),
         "Transcerebellar Diameter": (9, 10, 0.0051, 1.5165, -14.584, 0.0343, 0.415, "Transcerebellar Diameter"),
         "Vermian Height": (11, 12, -0.0138, 1.6136, -20.065, 0.0354, -0.1869, "Vermian Height"),
         "Vermian Width": (13, 14, -0.0089, 1.1119, -14.637, 0.0447, -0.5126, "Vermian Width"),
         "Pons Width": (15, 16, 0.002, 0.3144, -1.2147, 0.0124, 0.261, "Pons Width"),
         "Corpus Callosum Length": (17, 18, -0.0687, 5.1529, -57.904, 0.0274, 0.4763, "Corpus Callosum Length"),
         "Cavum Septum Pellucidum Width": (19, 20, -0.0156, 0.9472, -6.6953, 0.053, -0.4388, "Cavum Septum Pellucidum Width"),
-        "Atrial Diameter Right": (21, 22, 0.0078, -0.5216, 15.374, 0.0264, 0.5152, "Atrial Diameter Right"),
-        "Atrial Diameter Left": (35, 36, 0.0078, -0.5216, 15.374, 0.0264, 0.5152, "Atrial Diameter Left")
+        "Atrial Diameter Right": (35, 36, 0.0078, -0.5216, 15.374, 0.0264, 0.5152, "Atrial Diameter Right"),
+        "Atrial Diameter Left": (21, 22, 0.0078, -0.5216, 15.374, 0.0264, 0.5152, "Atrial Diameter Left")
     }
 
     results = []
@@ -229,16 +229,16 @@ def generate_table_measurements(input_lab_matrix, voxel_dims, ga):
         "Skull BPD": (1, 2, -0.0527, 5.7605, -46.436, 0.0895, 0.1414, "Skull BPD"),
         "Skull OFD": (5, 6, -0.0984, 8.8526, -81.605, 0.1511, -1.3192, "Skull OFD"),
         "Maximal brain width": (3, 4, 0.016, 1.763, -0.9597, 0.1308, -1.32, "Maximal brain width"),
-        "Brain OFD Right": (7, 8, -0.0781, 7.7234, -75.3, 0.1277, -0.9298, "Brain OFD Right"),
-        "Brain OFD Left": (32, 33, -0.0781, 7.7234, -75.3, 0.1277, -0.9298, "Brain OFD Left"),
+        "Brain OFD Right": (32, 33, -0.0781, 7.7234, -75.3, 0.1277, -0.9298, "Brain OFD Right"),
+        "Brain OFD Left": (7, 8, -0.0781, 7.7234, -75.3, 0.1277, -0.9298, "Brain OFD Left"),
         "Transcerebellar Diameter": (9, 10, 0.0051, 1.5165, -14.584, 0.0343, 0.415, "Transcerebellar Diameter"),
         "Vermian Height": (11, 12, -0.0138, 1.6136, -20.065, 0.0354, -0.1869, "Vermian Height"),
         "Vermian Width": (13, 14, -0.0089, 1.1119, -14.637, 0.0447, -0.5126, "Vermian Width"),
         "Pons Width": (15, 16, 0.002, 0.3144, -1.2147, 0.0124, 0.261, "Pons Width"),
         "Corpus Callosum Length": (17, 18, -0.0687, 5.1529, -57.904, 0.0274, 0.4763, "Corpus Callosum Length"),
         "Cavum Septum Pellucidum Width": (19, 20, -0.0156, 0.9472, -6.6953, 0.053, -0.4388, "Cavum Septum Pellucidum Width"),
-        "Atrial Diameter Right": (21, 22, 0.0078, -0.5216, 15.374, 0.0264, 0.5152, "Atrial Diameter Right"),
-        "Atrial Diameter Left": (35, 36, 0.0078, -0.5216, 15.374, 0.0264, 0.5152, "Atrial Diameter Left")
+        "Atrial Diameter Right": (35, 36, 0.0078, -0.5216, 15.374, 0.0264, 0.5152, "Atrial Diameter Right"),
+        "Atrial Diameter Left": (21, 22, 0.0078, -0.5216, 15.374, 0.0264, 0.5152, "Atrial Diameter Left")
     }
 
     results = []

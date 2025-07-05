@@ -31,13 +31,14 @@ echo "--------------------------------------------------------------------------
 echo
 
 
-if [ $# -ne 9 ] ; then
+if [ $# -ne 10 ] ; then
 
     echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-brain-biometry.sh "
     echo "            [Case ID, e.g., test100"
     echo "            [Case GA in weeks (integers), e.g., 30]"
     echo "            [Input T2w .nii.gz file, e.g., /home/data/test100-t2.nii.gz]"
     echo "            [Input BOUNTI label .nii.gz file, e.g., /home/data/test100-t2-bounti-tissue-label.nii.gz]"
+    echo "            [Input CC label .nii.gz file, e.g., /home/data/test100-t2-cc-label.nii.gz]"
     echo "            [Output resampled and reoriented T2w .nii.gz file, e.g., /home/data/reo-res-test100-t2.nii.gz]"
     echo "            [Output reoriented BOUNTI label .nii.gz file, e.g., /home/data/reo-res-test100-t2-bounti.nii.gz]"
     echo "            [Output rigid transformation .dof file, e.g., /home/data/reo-test100-rigid.dof]"
@@ -63,17 +64,19 @@ s=$1
 ga=$2
 t2=$3
 bounti=$4
-res_reo_t2=$5
-out_bounti=$6
-out_dof=$7
-bio=$8 
-bio_csv=$9
+cc=$5
+res_reo_t2=$6
+out_bounti=$7
+out_dof=$8
+bio=$9
+bio_csv=$10
 
 
 echo " - Case ID : " ${s}
 echo " - Case GA : " ${ga}
 echo " - Input T2w file: " ${t2}
 echo " - Input BOUNTI file: " ${bounti}
+echo " - Input CC file: " ${cc}
 echo " - Output resampled and reoriented T2w .nii.gz file: " ${res_reo_t2}
 echo " - Output resampled and reoriented BOUNTI .nii.gz file: " ${out_bounti}
 echo " - Output rigid transformation.dof file: " ${out_dof}
@@ -140,6 +143,11 @@ ${mirtk_path}/convert-image ${res_reo_t2} ${res_reo_t2} -short
 
 
 ${mirtk_path}/transform-image ${bounti} ${out_bounti} -target  ${res_reo_t2} -dofin ${proc}/rigid-to-atl-${ga}-${s}.dof -labels
+
+
+${mirtk_path}/transform-image ${cc} ${proc}/tr-cc.nii.gz -target  ${res_reo_t2} -dofin ${proc}/rigid-to-atl-${ga}-${s}.dof -labels
+${mirtk_path}/extract-connected-components ${proc}/tr-cc.nii.gz ${proc}/tr-cc.nii.gz
+
 
 cp ${proc}/rigid-to-atl-${ga}-${s}.dof ${out_dof}
 
@@ -222,7 +230,7 @@ ${mirtk_path}/replace-label-brain ${proc}/repl-res-org-${s}-bio-lab.nii.gz ${pro
 # ${mirtk_path}/replace-label-brain-flip ${proc}/repl-res-org-${s}-bio-lab.nii.gz ${proc}/repl-res-org-${s}-bio-lab-flip.nii.gz ${proc}/repl-res-org-${s}-bio-lab.nii.gz
 
 
-${mirtk_path}/fix-label-brain ${proc}/repl-res-org-${s}-bio-lab.nii.gz ${out_bounti} ${proc}/repl-res-org-${s}-bio-lab-fix.nii.gz ${ga}
+${mirtk_path}/fix-label-brain-cc ${proc}/repl-res-org-${s}-bio-lab.nii.gz ${out_bounti} ${proc}/tr-cc.nii.gz ${proc}/repl-res-org-${s}-bio-lab-fix.nii.gz ${ga}
 
 
 

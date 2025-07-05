@@ -51,6 +51,9 @@ def plot_brain_image(t2w_data, mask_data):
     axial_lab_slice3 = mask_data[:, :, round(z*0.5)]
     axial_lab_slice4 = mask_data[:, :, round(z*0.6)]
     axial_lab_slice5 = mask_data[:, :, round(z*0.7)]
+    
+    min_label = 1 
+    max_label = 19
 
     i = 0
     axs[i].imshow(axial_t2w_slice1.T, cmap='gray', origin='lower')
@@ -79,27 +82,27 @@ def plot_brain_image(t2w_data, mask_data):
 
     i = 5
     axs[i].imshow(axial_t2w_slice1.T, cmap='gray', origin='lower')
-    axs[i].imshow(axial_lab_slice1.T, cmap='jet', origin='lower', alpha=a)
+    axs[i].imshow(axial_lab_slice1.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
     i = 6
     axs[i].imshow(axial_t2w_slice2.T, cmap='gray', origin='lower')
-    axs[i].imshow(axial_lab_slice2.T, cmap='jet', origin='lower', alpha=a)
+    axs[i].imshow(axial_lab_slice2.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
     i = 7
     axs[i].imshow(axial_t2w_slice3.T, cmap='gray', origin='lower')
-    axs[i].imshow(axial_lab_slice3.T, cmap='jet', origin='lower', alpha=a)
+    axs[i].imshow(axial_lab_slice3.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
     i = 8
     axs[i].imshow(axial_t2w_slice4.T, cmap='gray', origin='lower')
-    axs[i].imshow(axial_lab_slice4.T, cmap='jet', origin='lower', alpha=a)
+    axs[i].imshow(axial_lab_slice4.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
     i = 9
     axs[i].imshow(axial_t2w_slice5.T, cmap='gray', origin='lower')
-    axs[i].imshow(axial_lab_slice5.T, cmap='jet', origin='lower', alpha=a)
+    axs[i].imshow(axial_lab_slice5.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
 

@@ -122,7 +122,7 @@ echo
 if [ $# -ne 2 ] ; then
 
     if [ $# -ne 6 ] ; then
-        echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-body-reconstruction.sh"
+        echo "Usage: bash /home/auto-proc-svrtk/scripts/auto-body-reconstruction-for-cropped.sh"
         echo "            [FULL path to the folder with raw T2w stacks in .nii or .dcm, e.g., /home/data/test]"
         echo "            [FULL path to the folder for recon results, e.g., /home/data/out-test]"
         echo "            (optional) [motion correction mode (0 or 1): 0 - minor, 1 - >180 degree rotations] - default: 1"
@@ -324,7 +324,24 @@ fi
         
         jj=$((${i}+1000))
         
-        ${mirtk_path}/mirtk resample-image ${st} ${main_dir}/tmp-res-global/stack-${jj}.nii.gz -size 1.5 1.5 1.5
+        
+        ${mirtk_path}/mirtk resample-image ${st} ${main_dir}/tmp-res-global/stack-${jj}.nii.gz -size 2 2 2
+        
+        resample-image ${main_dir}/tmp-res-global/stack-${jj}.nii.gz res.nii.gz -size 2 2 2 ;
+        edit-image res.nii.gz bg.nii.gz -dx 3 -dy 3 -dz 3 ; smooth-image bg.nii.gz sm.nii.gz 20 -float ;
+        pad-3d sm.nii.gz pad-sm.nii.gz 128 1 ;
+        threshold-image res.nii.gz m.nii.gz 0.0 ;
+        threshold-image  sm.nii.gz m-bg.nii.gz 0.0 ;
+        transform-image m.nii.gz m.nii.gz -target m-bg.nii.gz -labels ;
+        sub-images m-bg.nii.gz m.nii.gz m-bg.nii.gz ;
+        mask-image pad-sm.nii.gz m-bg.nii.gz pad-sm.nii.gz ;
+        transform-image ${main_dir}/tmp-res-global/stack-${jj}.nii.gz tr.nii.gz -target pad-sm.nii.gz ;
+        add-images pad-sm.nii.gz tr.nii.gz pad-comb.nii.gz ;
+        
+        cp pad-comb.nii.gz ${main_dir}/tmp-res-global/stack-${jj}.nii.gz
+        
+                
+        rm pad-sm.nii.gz tr.nii.gz pad-comb.nii.gz res.nii.gz bg.nii.gz sm.nii.gz m.nii.gz m-bg.nii.gz
 
     done
 

@@ -59,6 +59,7 @@ fi
 
 #fetal
 monai_check_path_bet_attunet=${segm_path}/trained_models/monai-checkpoints-attunet-brain-bet-1-lab
+gen_monai_check_path_bet_attunet=${segm_path}/trained_models/monai-checkpoints-atunet-brain_bet_general-1-lab
 monai_check_path_bounti_unet=${segm_path}/trained_models/monai-checkpoints-unet-early_brain-bounti-19-lab
 monai_check_path_bounti_attunet=${segm_path}/trained_models/monai-checkpoints-red-attunet-early_brain_bounti-19-lab
 
