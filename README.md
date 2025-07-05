@@ -26,7 +26,7 @@ Auto processing
 ---------------
 
 
-**The automated SVRTK docker tags are _fetalsvrtk/svrtk:general_auto_amd_ _fetalsvrtk/svrtk:general_auto_arm_ (M1 chip)**
+**The automated SVRTK docker tags are _fetalsvrtk/svrtk:general_auto_amd_ OR _fetalsvrtk/svrtk:general_auto_arm_ (M1 chip)**
 
 
 **AUTOMATED 3D T2w BRAIN / BODY RECONSTRUCTION:**
