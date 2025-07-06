@@ -7,6 +7,8 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 
 - The repository and code for automation of [SVR](https://github.com/SVRTK/SVRTK) reconstruction and deep learning segmentation were designed and created by [Alena Uus](https://github.com/alenauus), Kings' College London.
 
+- Please email alena.uus (at) kcl.ac.uk if in case of any questions.
+
 
 
 <img src="info/auto-svrtk-072025.jpg" alt="AUTOSVRTKEXAMPLE" height="400" align ="center" />
@@ -79,6 +81,20 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 ```
 
 
+**Semi-automated reconstruction options (with manual mask & template initialisation):**
+
+```bash
+
+#semi-manual brain reconstruction
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/semi-manual-brain-reconstruction.sh /home/data/folder-with-files /home/data/out-brain-recon-results /home/data/template-stack.nii.gz /home/data/template-brain-mask.nii.gz  1 4.5 1.0 1 ; ' 
+
+#semi-manual body reconstruction
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/semi-manual-auto-body-reconstruction.sh /home/data/folder-with-files /home/data/out-body-recon-results  /home/data/template-stack.nii.gz /home/data/template-brain-mask.nii.gz  1 4.5 1.0 1 ; '
+
+```
+
+
+
 
 **AUTOMATED 3D T2w BRAIN / BODY / ... SEGMENTATION:**
 
@@ -96,6 +112,7 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 - 0.55 / 1.5 / 3T
 - 80 – 250ms TE
 
+_Note: please use general_auto_arm tag for M1 Mac computers._
 
 ```bash
 
@@ -129,6 +146,7 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 - 0.55 / 1.5 / 3T
 - 80 – 250ms TE
 
+_Note: please use general_auto_arm tag for M1 Mac computers._
 
 ```bash
 
@@ -157,6 +175,8 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 - corresponding segmentations (after QC)
 - case GA
 
+- _Note: please use general_auto_arm tag for M1 Mac computers._
+
 <img src="info/html-report.jpg" alt="AUTOSVRTKEXAMPLE" height="180" align ="center" />
 
 ```bash
@@ -173,6 +193,37 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 ```
 
 
+**AUTOMATED BIOMETRY REPORTING FOR 3D T2w BRAIN RECONSTRUCTIONS:**
+
+
+*Input data requirements:*
+- 20-40 weeks GA
+- no extreme structural anomalies
+- reconstructed 3D brain image (after QC)
+- corresponding brain BOUNTI tissue segmentation (after QC)
+- sufficient image quality
+
+- case GA
+
+- _Note: please use general_auto_arm tag for M1 Mac computers._
+
+<img src="info/bio-github.jpg" alt="AUTOSVRTKEXAMPLE" height="150" align ="center" />
+
+```bash
+
+docker pull fetalsvrtk/svrtk:general_auto_amd
+
+#brain biometry
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-biometry-fix.sh CASE_ID CASE_GA(e.g., 30.14) /home/data/test-bio/org-t2w-svr.nii.gz /home/data/test-bio/bounti-label-for-t2w-svr.nii.gz /home/data/test-bio/out-res-reo-t2w-svr.nii.gz /home/data/test-bio/out-res-reo-bounti-label.nii.gz /home/data/test-bio/out-reo-transform.dof /home/data/test-bio/out-res-reo-bio-lab.nii.gz /home/data/test-bio/out-bio.csv /home/data/test-bio/out-bio-report.html ; '
+
+#additional brain biometry reporting of precomputed biometry outputs
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' python3 /home/auto-proc-svrtk/scripts/auto-reporting-brain-biometry.py CASE_ID 28.14 DATE /home/data/test-bio/out-res-reo-t2w-svr.nii.gz /home/data/test-bio/out-res-reo-bio-lab.nii.gz  /home/data/test-bio/out-bio-report.html ; chmod 777 /home/data/test-bio/out-bio-report.html ;  '
+
+
+```
+
+
+
 License
 -------
 
@@ -187,18 +238,18 @@ Citation and acknowledgements
 
 In case you found auto SVRTK useful please give appropriate credit to the software and [SVRTK dockers](https://hub.docker.com/r/fetalsvrtk/svrtk).
 
-**Auto brain reconstruction (please include all three citations):**
-
-> Uus, A. U., Neves Silva, S., Aviles Verdera, J., Payette, K., Hall, M., Colford, K., Luis, A., Sousa, H. S., Ning, Z., Roberts, T., McElroy, S.,  Deprez, M., Hajnal, J. V., Rutherford, M. A., Story, L., Hutter, J. (2024) Scanner-based real-time 3D brain+body slice-to-volume reconstruction for T2-weighted 0.55T low field fetal MRI. medRxiv 2024.04.22.24306177: https://doi.org/10.1101/2024.04.22.24306177
-
-> Uus, A. U., Hall, M., Payette, K., Hajnal, J. V., Deprez, M., Hutter, J., Rutherford, M. A., Story, L. (2023) Combined quantitative T2* map and structural T2- weighted tissue-specific analysis for fetal brain MRI: pilot automated pipeline. PIPPI MICCAI 2023 workshop, LNCS 14246.: https://doi.org/10.1007/978-3-031-45544-5_3
+**Auto brain reconstruction (please include both citations):**
+> Uus, A., Neves Silva, S., Aviles Verdera, J., Payette, K., Hall, M., Colford, K., Luis, A., Sousa, H., Ning, Z., Roberts, T., McElroy, S., Deprez, M., Hajnal, J., Rutherford, M., Story, L., & Hutter, J. (2025). Scanner-based real-time three-dimensional brain + body slice-to-volume reconstruction for T2-weighted 0.55-T low-field fetal magnetic resonance imaging. Pediatric Radiology, 55(3), 556–569. https://doi.org/10.1007/s00247-025-06165-x
 
 > Kuklisova-Murgasova, M., Quaghebeur, G., Rutherford, M. A., Hajnal, J. V., & Schnabel, J. A. (2012). Reconstruction of fetal brain MRI with intensity matching and complete outlier removal. Medical Image Analysis, 16(8), 1550–1564.: https://doi.org/10.1016/j.media.2012.07.004
 
 **Auto thorax/body reconstruction (please include both citations):**
-> Uus, A., Grigorescu, I., van Poppel, M., Steinweg, J. K., Roberts, T., Rutherford, M., Hajnal, J., Lloyd, D., Pushparajah, K. & Deprez, M. (2022) Automated 3D reconstruction of the fetal thorax in the standard atlas space from motion-corrupted MRI stacks for 21-36 weeks GA range. Medical Image Analysis, 80 (August 2022).: https://doi.org/10.1016/j.media.2022.102484
+> Uus, A., Neves Silva, S., Aviles Verdera, J., Payette, K., Hall, M., Colford, K., Luis, A., Sousa, H., Ning, Z., Roberts, T., McElroy, S., Deprez, M., Hajnal, J., Rutherford, M., Story, L., & Hutter, J. (2025). Scanner-based real-time three-dimensional brain + body slice-to-volume reconstruction for T2-weighted 0.55-T low-field fetal magnetic resonance imaging. Pediatric Radiology, 55(3), 556–569. https://doi.org/10.1007/s00247-025-06165-x
 
-> Uus, A., Zhang, T., Jackson, L., Roberts, T., Rutherford, M., Hajnal, J.V., Deprez, M. (2020). Deformable Slice-to-Volume Registration for Motion Correction in Fetal Body MRI and Placenta. IEEE Transactions on Medical Imaging, 39(9), 2750-2759: http://dx.doi.org/10.1109/TMI.2020.2974844 
+> Uus, A., Zhang, T., Jackson, L., Roberts, T., Rutherford, M., Hajnal, J.V., Deprez, M. (2020). Deformable Slice-to-Volume Registration for Motion Correction in Fetal Body MRI and Placenta. IEEE Transactions on Medical Imaging, 39(9), 2750-2759: http://dx.doi.org/10.1109/TMI.2020.2974844
+
+**Brain biometry:**
+> Luis, A., Uus, A., Matthew, J., Arulkumaran, S., Collado, A. E., Kyriakopoulou, V., Silva, S. N., Verdera, J. A., Hall, M., Bansal, S., McElroy, S., Colford, K., Hajnal, J. v, Hutter, J., Story, L., & Rutherford, M. (2025). Towards automated fetal brain biometry reporting for 3-dimensional T2-weighted 0.55-3T magnetic resonance imaging at 20-40 weeks gestational age range. MedRxiv, 2025.02.06.25321808. https://doi.org/10.1101/2025.02.06.25321808
 
 **Brain tissue segmentation:**
 > Uus, A. U., Kyriakopoulou, V., Makropoulos, A., Fukami-Gartner, A., Cromb, D., Davidson, A., Cordero-Grande, L., Price, A. N., Grigorescu, I., Williams, L. Z. J., Robinson, E. C., Lloyd, D., Pushparajah, K., Story, L., Hutter, J., Counsell, S. J., Edwards, A. D., Rutherford, M. A., Hajnal, J. V., Deprez, M. (2023) BOUNTI: Brain vOlumetry and aUtomated parcellatioN for 3D feTal MRI. eLife 12:RP88818; doi: https://doi.org/10.7554/eLife.88818.1
