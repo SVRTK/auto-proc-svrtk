@@ -197,15 +197,6 @@ done
 
 ${mirtk_path}/replace-label-brain ${proc}/repl-res-org-${s}-bio-lab.nii.gz ${proc}/repl-res-org-${s}-bio-lab.nii.gz
 
-#cp ${res_reo_t2} /home/data/test-bio/et2.nii.gz
-#cp ${proc}/repl-res-org-${s}-bio-lab.nii.gz /home/data/test-bio/ebio.nii.gz
-#
-#echo "EDIT LABELS !!!!!" ${proc}/repl-res-org-${s}-bio-lab.nii.gz
-#
-#sleep 200
-
-cp /home/data/test-bio/ebio.nii.gz ${proc}/repl-res-org-${s}-bio-lab.nii.gz
-
 
 
 ${mirtk_path}/fix-label-brain ${proc}/repl-res-org-${s}-bio-lab.nii.gz ${out_bounti} ${proc}/repl-res-org-${s}-bio-lab-fix.nii.gz ${ga}
@@ -220,9 +211,9 @@ if [[ ! -f ${test_file} ]];then
 
 
     ${mirtk_path}/dilate-image ${bounti} ${proc}/dl.nii.gz -iterations 5
-    ${mirtk_path}/resample-image ${t2} ${proc}/masked-res-t2.nii.gz -size 1.5 1.5 1.5
+    ${mirtk_path}/resample-image ${t2} ${proc}/masked-res-t2.nii.gz -size 1 1 1
     ${mirtk_path}/mask-image ${proc}/masked-res-t2.nii.gz ${proc}/dl.nii.gz ${proc}/masked-res-t2.nii.gz
-    ${mirtk_path}/resample-image ${atlas_train}/${ga}-t2.nii.gz ${proc}/res-atl.nii.gz -size 1.5 1.5 1.5
+    ${mirtk_path}/resample-image ${atlas_train}/${ga}-t2.nii.gz ${proc}/res-atl.nii.gz -size 1 1 1
     
     ${mirtk_path}/invert-dof ${proc}/aff-to-atl-${ga}-${s}.dof ${proc}/inv-aff-to-atl-${ga}-${s}.dof
 
