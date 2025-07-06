@@ -13,7 +13,14 @@ from io import BytesIO
 from scipy.spatial.distance import euclidean
 import scipy.stats as stats
 from scipy.stats import norm
+import matplotlib.cm as cm
+from matplotlib.colors import ListedColormap
 
+
+jet = cm.get_cmap('jet', 256)
+jet_colors = jet(np.linspace(0, 1, 256))
+jet_colors[0, -1] = 0  # Set alpha of the first color (usually label 0) to 0
+jet_transparent = ListedColormap(jet_colors)
 
 #========================================================================
 #========================================================================
@@ -52,8 +59,8 @@ def plot_brain_image(t2w_data, mask_data):
     axial_lab_slice4 = mask_data[:, :, round(z*0.6)]
     axial_lab_slice5 = mask_data[:, :, round(z*0.7)]
     
-    min_label = 1 
-    max_label = 19
+    min_label = 0
+    max_label = 20
 
     i = 0
     axs[i].imshow(axial_t2w_slice1.T, cmap='gray', origin='lower')
@@ -82,27 +89,27 @@ def plot_brain_image(t2w_data, mask_data):
 
     i = 5
     axs[i].imshow(axial_t2w_slice1.T, cmap='gray', origin='lower')
-    axs[i].imshow(axial_lab_slice1.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
+    axs[i].imshow(axial_lab_slice1.T, cmap=jet_transparent, origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
     i = 6
     axs[i].imshow(axial_t2w_slice2.T, cmap='gray', origin='lower')
-    axs[i].imshow(axial_lab_slice2.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
+    axs[i].imshow(axial_lab_slice2.T, cmap=jet_transparent, origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
     i = 7
     axs[i].imshow(axial_t2w_slice3.T, cmap='gray', origin='lower')
-    axs[i].imshow(axial_lab_slice3.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
+    axs[i].imshow(axial_lab_slice3.T, cmap=jet_transparent, origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
     i = 8
     axs[i].imshow(axial_t2w_slice4.T, cmap='gray', origin='lower')
-    axs[i].imshow(axial_lab_slice4.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
+    axs[i].imshow(axial_lab_slice4.T, cmap=jet_transparent, origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
     i = 9
     axs[i].imshow(axial_t2w_slice5.T, cmap='gray', origin='lower')
-    axs[i].imshow(axial_lab_slice5.T, cmap='jet', origin='lower', alpha=a, vmin=min_label, vmax=max_label)
+    axs[i].imshow(axial_lab_slice5.T, cmap=jet_transparent, origin='lower', alpha=a, vmin=min_label, vmax=max_label)
     axs[i].axis('off')
 
 
