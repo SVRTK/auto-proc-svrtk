@@ -11,7 +11,7 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 
 
 
-<img src="info/auto-svrtk-072025.jpg" alt="AUTOSVRTKEXAMPLE" height="600" align ="center" />
+<img src="info/auto-svrtk-072025.jpg" alt="AUTOSVRTKEXAMPLE" height="700" align ="center" />
 
 
 The auto pipelines are used in:
