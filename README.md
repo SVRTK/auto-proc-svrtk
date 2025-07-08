@@ -264,6 +264,9 @@ In case you found auto SVRTK useful please give appropriate credit to the softwa
 **Face segmentation:**
 > Matthew, J., Uus, A., de Souza, L., Wright, R., Fukami-Gartner, A., Priego, G., Saija, C., Deprez, M., Collado, A. E., Hutter, J., Story, L., Malamateniou, C., Rhode, K., Hajnal, J., & Rutherford, M. A. (2024). Craniofacial phenotyping with fetal MRI: a feasibility study of 3D visualisation, segmentation, surface-rendered and physical models. BMC Medical Imaging, 24(1), 52. https://doi.org/10.1186/s12880-024-01230-7
 
+**Brain biometry:**
+> Luis, A., Uus, A., Matthew, J., Arulkumaran, S., Collado, A. E., Kyriakopoulou, V., Silva, S. N., Verdera, J. A., Hall, M., Bansal, S., McElroy, S., Colford, K., Hajnal, J. v, Hutter, J., Story, L., & Rutherford, M. (2025). Towards automated fetal brain biometry reporting for 3-dimensional T2-weighted 0.55-3T magnetic resonance imaging at 20-40 weeks gestational age range. MedRxiv, 2025.02.06.25321808. https://doi.org/10.1101/2025.02.06.25321808
+
 **Auto brain reorientation:**
 > Uus, A. U., Hall, M., Payette, K., Hajnal, J. V., Deprez, M., Hutter, J., Rutherford, M. A., Story, L. (2023) Combined quantitative T2* map and structural T2- weighted tissue-specific analysis for fetal brain MRI: pilot automated pipeline. PIPPI MICCAI 2023 workshop, LNCS 14246.: https://doi.org/10.1007/978-3-031-45544-5_3
 
