@@ -20,6 +20,14 @@ The auto pipelines are used in:
 
 - Integration via Gadgetron led by [Sara Neves Silva](https://github.com/saranevessilva): https://github.com/SVRTK/gadgetron-svrtk-integration
 
+
+Development of individual docker functions:
+
+- Aysha Luis and Jackie Matthew lead fetal brain and head biometry work;
+
+
+
+
 Development of SVRTK was supported by projects led by Prof Mary Rutherford, Dr Lisa Story, Dr Maria Deprez, Dr Jana Hutter and Prof Jo Hajnal.
 
 Optimisation of the docker environment is supported by [Joshua van Amerom](https://github.com/jfpva). 
