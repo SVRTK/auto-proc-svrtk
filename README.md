@@ -14,17 +14,24 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 <img src="info/auto-svrtk-072025.jpg" alt="AUTOSVRTKEXAMPLE" height="700" align ="center" />
 
 
-The auto pipelines are used in:
+**The auto pipelines are used in:**
 
 - Integration via AIDE led by [Tom Roberts](https://github.com/tomaroberts): https://github.com/SVRTK/aide-svrtk
 
 - Integration via Gadgetron led by [Sara Neves Silva](https://github.com/saranevessilva): https://github.com/SVRTK/gadgetron-svrtk-integration
 
 
-Development of individual docker functions:
 
-- Aysha Luis and Jackie Matthew lead fetal brain and head biometry work;
+**BOUNTI brain segmentation labels are used in surface generation methods:**
 
+- FetPype: https://github.com/fetpype/surface_processing and 
+
+- MITK: https://github.com/SVRTK/surface-svrtk
+
+
+**Development of individual docker functions:**
+
+- Aysha Luis and Jackie Matthew lead fetal brain and head biometry work
 
 
 
