@@ -22,9 +22,9 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 
 
 
-**BOUNTI brain segmentation labels are used in surface generation methods:**
+**Surface generation methods based on BOUNTI brain labels:**
 
-- FetPype: https://github.com/fetpype/surface_processing and 
+- FetPype: https://github.com/fetpype/surface_processing 
 
 - MITK: https://github.com/SVRTK/surface-svrtk
 
