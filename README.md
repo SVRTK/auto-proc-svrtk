@@ -29,11 +29,6 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 - MITK: https://github.com/SVRTK/surface-svrtk
 
 
-**Development of individual docker functions:**
-
-- Aysha Luis and Jackie Matthew lead fetal brain and head biometry work
-
-
 
 Development of SVRTK was supported by projects led by Prof Mary Rutherford, Dr Lisa Story, Dr Maria Deprez, Dr Jana Hutter and Prof Jo Hajnal.
 
