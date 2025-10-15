@@ -26,7 +26,6 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 
 - FetPype: https://github.com/fetpype/surface_processing 
 
-- MITK: https://github.com/SVRTK/surface-svrtk
 
 
 
