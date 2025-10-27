@@ -19,12 +19,8 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 - Scanner integration via AIDE led by [Tom Roberts](https://github.com/tomaroberts): https://github.com/SVRTK/aide-svrtk
 
 - Scanner integration via Gadgetron led by [Sara Neves Silva](https://github.com/saranevessilva): https://github.com/SVRTK/gadgetron-svrtk-integration
-
-
-
-**Surface generation methods based on BOUNTI brain labels:**
-
-- FetPype: https://github.com/fetpype/surface_processing 
+  
+- FetPype framework for reconstruction, segmentation and surface generation: https://github.com/fetpype/fetpype
 
 
 
