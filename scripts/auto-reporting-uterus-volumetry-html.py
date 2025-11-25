@@ -265,7 +265,7 @@ html_content = f"""
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D T2w Fetal MRI: Automated Uterus Volumetry Report</title>
+    <title>3-D T2W Fetal MRI: Automated Uterus Volumetry Report</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         .container {{
@@ -306,7 +306,7 @@ html_content = f"""
     </style>
 </head>
 <body>
-    <h1>3D T2w Fetal MRI: Automated Uterus Volumetry Report</h1>
+    <h1>3-D T2W Fetal MRI: Automated Uterus Volumetry Report</h1>
     <div class="container">
         <div class="left-column">
             <table class="info-table" border="1">
@@ -315,7 +315,7 @@ html_content = f"""
                 <tr><td>Scan date:</td><td>{input_scan_date}</td></tr>
             </table>
 
-            <img src="data:image/png;base64,{uterus_image_b64}" alt="3D segmentation volumes" class="uterus-image">
+            <img src="data:image/png;base64,{uterus_image_b64}" alt="3-D segmentation volumes" class="uterus-image">
 
             <table class="info-table" border="1">
                 <tr><th>Measurement</th><th>Volume [cc]</th><th>O/E</th><th>Percentile</th><th>Z-score</th></tr>
