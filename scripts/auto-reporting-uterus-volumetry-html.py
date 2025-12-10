@@ -41,6 +41,44 @@ def compute_volume(input_lab_matrix, label1, label2, label3, label4, label5, vox
     return volume_cc
     
 
+
+def compute_weight(input_lab_matrix, voxel_dims):
+
+    label1 = 3
+    label2 = 4
+
+    landmark1_coords = np.count_nonzero(input_lab_matrix == label1)
+    landmark2_coords = np.count_nonzero(input_lab_matrix == label2)
+
+    volume_cc = (landmark1_coords + landmark2_coords) * voxel_dims[0] * voxel_dims[1] * voxel_dims[2]
+
+#    volume_cc = volume_cc / 1000
+    
+    weight_kg = 1.06 * 0.001 * volume_cc + 0.12
+
+    return weight_kg
+
+
+#($EFW_{Baker}(kg) = 1.06 \cdot V_{fetus} + 0.12$) \cite{Baker1994}
+
+
+def compute_head_body_ratio(input_lab_matrix, voxel_dims):
+
+    label1 = 3
+    label2 = 4
+    
+    landmark1_coords = np.count_nonzero(input_lab_matrix == label1)
+    landmark2_coords = np.count_nonzero(input_lab_matrix == label2)
+
+    head_volume_cc = (landmark2_coords) * voxel_dims[0] * voxel_dims[1] * voxel_dims[2]
+    body_volume_cc = (landmark1_coords) * voxel_dims[0] * voxel_dims[1] * voxel_dims[2]
+
+    head_body_ratio = head_volume_cc / body_volume_cc
+
+    return head_body_ratio
+
+
+
 def plot_uterus_image(t2w_data, mask_data):
 
 
@@ -174,11 +212,82 @@ def create_centile_graph(ga, computed_value, a, b, c, a5, b5, c5, title):
     )
     return fig.to_html(full_html=False)
 
+
+
+def create_centile_graph_ratio(ga, computed_value, a, b, c, a5, b5, c5, title):
+    x = np.linspace(20, 40, 100)
+    y = a * x * x + b * x + c
+
+    y5 = y - 1.645 * (a5 * x * x + b5 * x + c5)
+    y95 = y + 1.645 * (a5 * x * x + b5 * x + c5)
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x, y=y, mode='lines', line_color='black'))
+    fig.add_trace(go.Scatter(x=x, y=y5, mode='lines', line_color='grey'))
+    fig.add_trace(go.Scatter(x=x, y=y95, mode='lines', line_color='grey'))
+    fig.add_trace(go.Scatter(x=[ga], y=[computed_value], mode='markers', marker_color='red',
+                             marker_size=10, marker_symbol='x'))
+    fig.update_layout(
+        title={
+            'text': title,
+            'x': 0.5,
+            'xanchor': 'center'
+        },
+        xaxis_title="GA [weeks]",
+        yaxis_title="ratio",
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        xaxis=dict(gridcolor='lightgrey'),
+        yaxis=dict(gridcolor='lightgrey'),
+        showlegend=False
+    )
+    return fig.to_html(full_html=False)
+
+
+def create_centile_graph_weight(ga, computed_value, a, b, c, a5, b5, c5, title):
+    x = np.linspace(20, 40, 100)
+    y = a * x * x + b * x + c
+
+    y5 = y - 1.645 * (a5 * x * x + b5 * x + c5)
+    y95 = y + 1.645 * (a5 * x * x + b5 * x + c5)
+    
+    y = 1.06 * y + 0.12
+    y5 = 1.06 * y5 + 0.12
+    y95 = 1.06 * y95 + 0.12
+     
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x, y=y, mode='lines', line_color='black'))
+    fig.add_trace(go.Scatter(x=x, y=y5, mode='lines', line_color='grey'))
+    fig.add_trace(go.Scatter(x=x, y=y95, mode='lines', line_color='grey'))
+    fig.add_trace(go.Scatter(x=[ga], y=[computed_value], mode='markers', marker_color='red',
+                             marker_size=10, marker_symbol='x'))
+    fig.update_layout(
+        title={
+            'text': title,
+            'x': 0.5,
+            'xanchor': 'center'
+        },
+        xaxis_title="GA [weeks]",
+        yaxis_title="weight [g]",
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        xaxis=dict(gridcolor='lightgrey'),
+        yaxis=dict(gridcolor='lightgrey'),
+        showlegend=False
+    )
+    return fig.to_html(full_html=False)
+
+
+
+
+
+
 def generate_all_measurements(input_lab_matrix, voxel_dims, ga):
     measurements = {
-        "Amniotic Fluid": (1, -1, -1, -1, -1, -1.6525,  98.534, -851.15, -0.5451, 38.784, -430.84, "Amniotic Fluid"),
-        "Placenta": (2, -1, -1, -1, -1, -0.091, 41.116, -507.49, -0.2115, 16.766, -178.57, "Placenta"),
-        "Fetus": (3, 4, -1, -1, -1,  4.4677, -107.26, 614.58, 0.6207, -20.43, 194.32, "Fetus")
+        "Amniotic Fluid Volume [cc]": (1, -1, -1, -1, -1, -1.6525,  98.534, -851.15, -0.5451, 38.784, -430.84, "Amniotic Fluid Volume"),
+        "Placenta Volume [cc]": (2, -1, -1, -1, -1, -0.091, 41.116, -507.49, -0.2115, 16.766, -178.57, "Placenta Volume"),
+        "Fetal Volume [cc]": (3, 4, -1, -1, -1,  4.4677, -107.26, 614.58, 0.6207, -20.43, 194.32, "Fetal Volume")
     }
 
     results = []
@@ -190,14 +299,49 @@ def generate_all_measurements(input_lab_matrix, voxel_dims, ga):
         percentile = norm.cdf(z_score) * 100
         centile_graph_html = create_centile_graph(ga, volume_cc, a, b, c, a5, b5, c5, title)
         results.append((name, volume_cc, centile_graph_html))
+        
+#    head / body ratio
+    a = 0.0007
+    b = -0.0568
+    c = 1.5164
+    a5 = 0.000043
+    b5 = -0.003207
+    c5 = 0.092266
+    head_body_ratio = compute_head_body_ratio(input_lab_matrix, voxel_dims)
+    mean = a * ga * ga + b * ga + c
+    std_dev = a5 * ga * ga + b5 * ga + c5
+    z_score = (head_body_ratio - mean) / std_dev
+    percentile = norm.cdf(z_score) * 100
+    oe_val = head_body_ratio / mean
+    centile_graph_html = create_centile_graph_ratio(ga, head_body_ratio, a, b, c, a5, b5, c5, "Fetal Head/Body Ratio")
+    results.append(("Fetal Head/Body Ratio", head_body_ratio, centile_graph_html))
+
+#   fetal weight
+    a = 4.4677
+    b = -107.26
+    c = 614.58
+    a5 = 0.6207
+    b5 = -20.43
+    c5 = 194.32
+    fetal_weight = compute_weight(input_lab_matrix, voxel_dims)
+    mean = a * ga * ga + b * ga + c
+    std_dev = a5 * ga * ga + b5 * ga + c5
+    mean = 1.06 * mean + 0.12
+    std_dev = 1.06 * std_dev + 0.12
+    z_score = (fetal_weight - mean) / std_dev
+    percentile = norm.cdf(z_score) * 100
+    oe_val = fetal_weight / mean
+    centile_graph_html = create_centile_graph_weight(ga, fetal_weight, a, b, c, a5, b5, c5, "Estimated Fetal Weight")
+    results.append(("Estimated Fetal Weight [g]", fetal_weight, centile_graph_html))
+        
     return results
 
 
 def generate_table_measurements(input_lab_matrix, voxel_dims, ga):
     measurements = {
-        "Amniotic Fluid": (1, -1, -1, -1, -1, -1.6525,  98.534, -851.15, -0.5451, 38.784, -430.84, "Amniotic Fluid"),
-        "Placenta": (2, -1, -1, -1, -1, -0.091, 41.116, -507.49, -0.2115, 16.766, -178.57, "Placenta"),
-        "Fetus": (3, 4, -1, -1, -1,  4.4677, -107.26, 614.58, 0.6207, -20.43, 194.32, "Fetus")
+        "Amniotic Fluid Volume [cc]": (1, -1, -1, -1, -1, -1.6525,  98.534, -851.15, -0.5451, 38.784, -430.84, "Amniotic Fluid Volume"),
+        "Placenta Volume [cc]": (2, -1, -1, -1, -1, -0.091, 41.116, -507.49, -0.2115, 16.766, -178.57, "Placenta Volume"),
+        "Fetal Volume [cc]": (3, 4, -1, -1, -1,  4.4677, -107.26, 614.58, 0.6207, -20.43, 194.32, "Fetal Volume")
     }
 
     results = []
@@ -209,6 +353,39 @@ def generate_table_measurements(input_lab_matrix, voxel_dims, ga):
         z_score = (volume_cc - mean) / std_dev
         percentile = norm.cdf(z_score) * 100
         results.append((name, volume_cc, oe_val, percentile, z_score))
+        
+    #    head / body ratio
+    a = 0.0007
+    b = -0.0568
+    c = 1.5164
+    a5 = 0.000043
+    b5 = -0.003207
+    c5 = 0.092266
+    head_body_ratio = compute_head_body_ratio(input_lab_matrix, voxel_dims)
+    mean = a * ga * ga + b * ga + c
+    std_dev = a5 * ga * ga + b5 * ga + c5
+    z_score = (head_body_ratio - mean) / std_dev
+    percentile = norm.cdf(z_score) * 100
+    oe_val = head_body_ratio / mean
+    results.append(("Fetal Head/Body Ratio", head_body_ratio, oe_val, percentile, z_score))
+
+#   fetal weight
+    a = 4.4677
+    b = -107.26
+    c = 614.58
+    a5 = 0.6207
+    b5 = -20.43
+    c5 = 194.32
+    fetal_weight = compute_weight(input_lab_matrix, voxel_dims)
+    mean = a * ga * ga + b * ga + c
+    std_dev = a5 * ga * ga + b5 * ga + c5
+    mean = 1.06 * mean + 0.12
+    std_dev = 1.06 * std_dev + 0.12
+    z_score = (fetal_weight - mean) / std_dev
+    percentile = norm.cdf(z_score) * 100
+    oe_val = fetal_weight / mean
+    results.append(("Estimated Fetal Weight [g]", fetal_weight, oe_val, percentile, z_score))
+        
     return results
 
 
@@ -318,7 +495,7 @@ html_content = f"""
             <img src="data:image/png;base64,{uterus_image_b64}" alt="3-D segmentation volumes" class="uterus-image">
 
             <table class="info-table" border="1">
-                <tr><th>Measurement</th><th>Volume [cc]</th><th>O/E</th><th>Percentile</th><th>Z-score</th></tr>
+                <tr><th>Measurement</th><th>Value</th><th>O/E</th><th>Percentile</th><th>Z-score</th></tr>
                 {measurements_table}
             </table>
         </div>
