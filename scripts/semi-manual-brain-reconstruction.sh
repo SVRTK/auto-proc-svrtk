@@ -354,18 +354,18 @@ if [ $recon_roi = "brain" ]; then
     number_of_stacks=$(ls ../org-files-preproc/*.nii* | wc -l)
     
     
-    ${mirtk_path}/mirtk reconstruct tmp-output.nii.gz  ${number_of_stacks} ../org-files-preproc/*.nii* -mask ${man_mask} -template ${man_template} -default_thickness ${default_thickness} -svr_only -iterations 1 -resolution 1.6
+    ${mirtk_path}/mirtk reconstruct tmp-output.nii.gz  ${number_of_stacks} ../org-files-preproc/*.nii* -mask ${man_mask} -template ${man_template} -default_thickness ${default_thickness} -svr_only -iterations 1 -resolution 1.6 -with_background -structural
     
-    echo ${mirtk_path}/mirtk reconstruct tmp-output.nii.gz  ${number_of_stacks} ../org-files-preproc/*.nii* -mask ${man_mask} -template ${man_template} -default_thickness ${default_thickness} -svr_only -iterations 1 -resolution 1.6
+#    echo ${mirtk_path}/mirtk reconstruct tmp-output.nii.gz  ${number_of_stacks} ../org-files-preproc/*.nii* -mask ${man_mask} -template ${man_template} -default_thickness ${default_thickness} -svr_only -iterations 1 -resolution 1.6
     
 
     if [ $motion_correction_mode -eq 1 ]; then
     
-        ${mirtk_path}/mirtk reconstruct ../SVR-output-${recon_roi}.nii.gz ${number_of_stacks} ../org-files-preproc/*.nii* -mask ${man_mask} -template tmp-output.nii.gz -default_thickness ${default_thickness} -iterations 3 -resolution ${recon_resolution} -structural -svr_only
+        ${mirtk_path}/mirtk reconstruct ../SVR-output-${recon_roi}.nii.gz ${number_of_stacks} ../org-files-preproc/*.nii* -mask ${man_mask} -template tmp-output.nii.gz -default_thickness ${default_thickness} -iterations 3 -resolution ${recon_resolution} -with_background -structural -svr_only
         
     else
     
-        ${mirtk_path}/mirtk reconstruct ../SVR-output-${recon_roi}.nii.gz ${number_of_stacks} ../org-files-preproc/*.nii* -mask ${man_mask} -template tmp-output.nii.gz -default_thickness ${default_thickness}  -iterations 3 -resolution ${recon_resolution} -svr_only
+        ${mirtk_path}/mirtk reconstruct ../SVR-output-${recon_roi}.nii.gz ${number_of_stacks} ../org-files-preproc/*.nii* -mask ${man_mask} -template tmp-output.nii.gz -default_thickness ${default_thickness}  -iterations 3 -resolution ${recon_resolution} -with_background -structural -svr_only
         
     fi
         
@@ -411,7 +411,7 @@ if [ $recon_roi = "brain" ]; then
     
     echo " ... "
     
-    # ${mirtk_path}/mirtk mask-image SVR-output-${recon_roi}.nii.gz average_mask_cnn.nii.gz   masked-SVR-output-${recon_roi}.nii.gz
+#     ${mirtk_path}/mirtk mask-image SVR-output-${recon_roi}.nii.gz average_mask_cnn.nii.gz   masked-SVR-output-${recon_roi}.nii.gz
     
     ${mirtk_path}/mirtk prepare-for-monai res-svr-files/ svr-files/ reo-svr-info.json reo-svr-info.csv ${res} ${number_of_stacks} masked-SVR-output-${recon_roi}.nii.gz > tmp.log
 
