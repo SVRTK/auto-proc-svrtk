@@ -159,7 +159,7 @@ _Note: please use general_auto_arm tag for M1 Mac computers._
 docker pull fetalsvrtk/svrtk:general_auto_amd
 
 #auto internal uterus segmentation for BTFE stacks (fetus, cord, amniotic fluid, placenta)
-docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-bounti-segmentation-fetal.sh /home/data/your_folder_with_brain_svr_t2_files  /home/data/output_folder_for_segmentations ; '
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-uterus-internal-segmentation-btfe.sh /home/data/your_folder_with_btfe_uterus_files  /home/data/output_folder_for_segmentations ; '
 
 
 ```
