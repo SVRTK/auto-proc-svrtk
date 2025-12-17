@@ -141,6 +141,31 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 
 ```
 
+
+
+**AUTOMATED BTFE / ... SEGMENTATION:**
+
+*Input data requirements:*
+- sufficient SNR and image quality
+- full ROI coverage
+- no extreme shading artifacts
+- no extreme structural anomalies
+- 0.55 / 1.5 / 3T
+
+_Note: please use general_auto_arm tag for M1 Mac computers._
+
+```bash
+
+docker pull fetalsvrtk/svrtk:general_auto_amd
+
+#auto internal uterus segmentation for BTFE stacks (fetus, cord, amniotic fluid, placenta)
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-bounti-segmentation-fetal.sh /home/data/your_folder_with_brain_svr_t2_files  /home/data/output_folder_for_segmentations ; '
+
+
+```
+
+
+
 **AUTOMATED REORIENTATION OF 3D T2w BRAIN / BODY / THORAX RECONS TO STANDARD SPACE:**
 
 
