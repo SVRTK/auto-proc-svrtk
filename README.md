@@ -92,10 +92,10 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 ```bash
 
 #semi-manual brain reconstruction
-docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/semi-manual-brain-reconstruction.sh /home/data/folder-with-files /home/data/out-brain-recon-results /home/data/template-stack.nii.gz /home/data/template-brain-mask.nii.gz  1 4.5 1.0 1 ; ' 
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/semi-manual-brain-reconstruction.sh /home/data/folder-with-files /home/data/out-brain-recon-results /home/data/template-stack.nii.gz /home/data/template-mask.nii.gz  1 4.5 1.0 1 ; ' 
 
 #semi-manual body reconstruction
-docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/semi-manual-auto-body-reconstruction.sh /home/data/folder-with-files /home/data/out-body-recon-results  /home/data/template-stack.nii.gz /home/data/template-brain-mask.nii.gz  1 4.5 1.0 1 ; '
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/semi-manual-body-reconstruction.sh /home/data/folder-with-files /home/data/out-body-recon-results  /home/data/template-stack.nii.gz /home/data/template-mask.nii.gz  1 4.5 1.0 1 ; '
 
 ```
 
