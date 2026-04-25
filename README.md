@@ -24,10 +24,18 @@ This repository contains the pipelines for [MONAI](https://github.com/Project-MO
 
 
 
+**NOTE: for Multi-BOUNTI segmentation please go to this repository:** [https://github.com/SVRTK/perinatal-brain-mri-analysis](https://github.com/SVRTK/perinatal-brain-mri-analysis).
+
+
 
 Development of SVRTK was supported by projects led by Prof Mary Rutherford, Dr Lisa Story, Dr Maria Deprez, Dr Jana Hutter and Prof Jo Hajnal.
 
 Optimisation of the docker environment is supported by [Joshua van Amerom](https://github.com/jfpva). 
+
+
+
+
+
 
 
 Auto processing 
@@ -119,6 +127,11 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 - 80 – 250ms TE
 
 _Note: please use general_auto_arm tag for M1 Mac computers._
+
+
+**NOTE: for Multi-BOUNTI segmentation please go to this repository:** [https://github.com/SVRTK/perinatal-brain-mri-analysis](https://github.com/SVRTK/perinatal-brain-mri-analysis).
+
+
 
 ```bash
 
