@@ -56,6 +56,7 @@ Auto processing
 - 0.55 / 1.5 / 3T
 - 80 – 180ms TE
 - sufficient SNR and image quality
+- suggestion: preselecting only good quality stacks will improve performance
 
 *Output:*
 - 0.8mm resolution (or as specified)
@@ -66,7 +67,7 @@ Auto processing
 docker pull fetalsvrtk/svrtk:general_auto_amd
 
 #auto brain reconstruction
-docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-reconstruction.sh /home/data/folder-with-files /home/data/out-brain-recon-results 1 3.0 0.8 1 ; ' 
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-reconstruction-2026.sh /home/data/folder-with-files /home/data/out-brain-recon-results 1 3.0 0.8 1 ; ' 
 
 #auto body reconstruction
 docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-body-reconstruction.sh /home/data/folder-with-files /home/data/out-body-recon-results 1 3.0 0.8 1 ; '
@@ -87,7 +88,7 @@ docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/
 ```bash
 
 #0.55T auto brain reconstruction
-docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-055t-reconstruction.sh /home/data/folder-with-files /home/data/out-brain-recon-results 1 4.5 1.0 1 ; ' 
+docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-brain-055t-reconstruction-2026.sh /home/data/folder-with-files /home/data/out-brain-recon-results 1 4.5 1.0 1 ; ' 
 
 #0.55T auto body reconstruction
 docker run --rm  --mount type=bind,source=LOCATION_ON_YOUR_MACHINE,target=/home/data  fetalsvrtk/svrtk:general_auto_amd sh -c ' bash /home/auto-proc-svrtk/scripts/auto-body-055t-reconstruction.sh /home/data/folder-with-files /home/data/out-body-recon-results 1 4.5 1.0 1 ; '
