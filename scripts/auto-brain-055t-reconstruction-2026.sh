@@ -52,6 +52,7 @@ software_path=/home
 
 default_run_dir=/home/tmp_proc
 
+
 segm_path=${software_path}/auto-proc-svrtk
 
 dcm2niix_path=/bin/dcm2niix/build/bin
@@ -468,23 +469,41 @@ fi
 test_file=recon-files/reo.txt
 if [ -f ${test_file} ];then
 
+
     ${mirtk_path}/mirtk transform-image selected-template.nii.gz selected-template.nii.gz -target ${atl}/dl-ref-1mm.nii.gz
     ${mirtk_path}/mirtk nan selected-template.nii.gz 100000
     ${mirtk_path}/mirtk threshold-image selected-template.nii.gz m.nii.gz 0.5 > t.txt 
+    ${mirtk_path}/mirtk dilate-image m.nii.gz m.nii.gz -iterations 7 
     ${mirtk_path}/mirtk crop-image selected-template.nii.gz m.nii.gz selected-template.nii.gz 
     ${mirtk_path}/mirtk transform-image selected-mask.nii.gz selected-mask.nii.gz -target selected-template.nii.gz -labels 
 
-else 
+else
 
-    ${mirtk_path}/mirtk resample-image selected-mask.nii.gz  selected-mask.nii.gz -size 1 1 1 -interp NN 
+
+    ${mirtk_path}/mirtk transform-image selected-template.nii.gz selected-template.nii.gz -target ${atl}/dl-ref-1mm.nii.gz
+    ${mirtk_path}/mirtk nan selected-template.nii.gz 100000
+    ${mirtk_path}/mirtk threshold-image selected-template.nii.gz m.nii.gz 0.5 > t.txt 
+    ${mirtk_path}/mirtk dilate-image m.nii.gz m.nii.gz -iterations 7 
+    ${mirtk_path}/mirtk crop-image selected-template.nii.gz m.nii.gz selected-template.nii.gz 
+    ${mirtk_path}/mirtk transform-image selected-mask.nii.gz selected-mask.nii.gz -target selected-template.nii.gz -labels 
+
+
+    # ${mirtk_path}/mirtk crop-image selected-template.nii.gz selected-mask.nii.gz cropped-selected-template.nii.gz
+    # ${mirtk_path}/mirtk edit-image ${atl}/dl-ref-1mm.nii.gz tmp-ref.nii.gz -copy-origin cropped-selected-template.nii.gz
+	# ${mirtk_path}/mirtk transform-image selected-template.nii.gz selected-template.nii.gz -target tmp-ref.nii.gz
+	# ${mirtk_path}/mirtk nan selected-template.nii.gz 100000
+    # ${mirtk_path}/mirtk threshold-image selected-template.nii.gz m.nii.gz 0.5 > t.txt 
+    # ${mirtk_path}/mirtk crop-image selected-template.nii.gz m.nii.gz selected-template.nii.gz 
+    # ${mirtk_path}/mirtk transform-image selected-mask.nii.gz selected-mask.nii.gz -target selected-template.nii.gz -labels
 
 fi 
 
-${mirtk_path}/mirtk dilate-image selected-mask.nii.gz dl-selected-mask.nii.gz -iterations 1 
+
+${mirtk_path}/mirtk dilate-image selected-mask.nii.gz dl-selected-mask.nii.gz -iterations 2
 
 
 echo
-echo "-----------------------------------------------------------------------------"
+echo "-----------------------------------------------------------------------------" 
 echo "-----------------------------------------------------------------------------"
 echo 
 echo "RUNNING RECONSTRUCTION ..."
@@ -492,11 +511,13 @@ echo
 
 mkdir recon-out 
 cd recon-out
-
+ 
 
 ${mirtk_path}/mirtk reconstruct ../tmp.nii.gz ${number_of_stacks} ../recon-files/proc-stack-*.nii.gz -svr_only -with_background  -structural -resolution 1.2 -iterations 2 -sr_iterations 2 -template ../selected-template.nii.gz -mask ../dl-selected-mask.nii.gz
 
-${mirtk_path}/mirtk reconstruct ../SVR-output.nii.gz ${number_of_stacks} ../recon-files/proc-stack-*.nii.gz -svr_only -with_background  -structural -resolution ${recon_resolution} -template image1.nii.gz -mask ../dl-selected-mask.nii.gz
+${mirtk_path}/mirtk transform-image image1.nii.gz  tr-image1.nii.gz  -target ../selected-template.nii.gz
+
+${mirtk_path}/mirtk reconstruct ../SVR-output.nii.gz ${number_of_stacks} ../recon-files/proc-stack-*.nii.gz -svr_only -with_background  -structural -resolution ${recon_resolution} -template tr-image1.nii.gz -mask ../dl-selected-mask.nii.gz
 
  
 test_file=../SVR-output.nii.gz
@@ -520,7 +541,7 @@ echo
 
 cd ${default_run_dir}
     
-${mirtk_path}/mirtk dilate-image dl-selected-mask.nii.gz dl-selected-mask.nii.gz -iterations 1
+${mirtk_path}/mirtk dilate-image dl-selected-mask.nii.gz dl-selected-mask.nii.gz -iterations 2
 ${mirtk_path}/mirtk mask-image SVR-output.nii.gz dl-selected-mask.nii.gz masked-SVR-output.nii.gz
 ${mirtk_path}/mirtk crop-image masked-SVR-output.nii.gz dl-selected-mask.nii.gz masked-SVR-output.nii.gz
 ${mirtk_path}/mirtk pad-3d masked-SVR-output.nii.gz pad-res-masked-SVR-output.nii.gz 128 1 
